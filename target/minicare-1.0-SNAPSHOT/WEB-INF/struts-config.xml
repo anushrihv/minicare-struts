@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+        "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+    <form-beans>
+        <form-bean name="LoginForm" type="com.minicare.dto.LoginForm" />
+        <form-bean name="MemberForm" type="com.minicare.dto.MemberForm" />
+        <form-bean name="SitterForm" type="com.minicare.dto.SitterForm" />
+        <form-bean name="SeekerForm" type="com.minicare.dto.SeekerForm" />
+    </form-beans>
+
+    <action-mappings>
+
+        <action path="/welcomepage" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/welcome.jsp" validate="false" name="MemberForm"/>
+
+        <action path="/visitor/login" validate="true" type="com.minicare.controller.visitor.LoginAction"
+                name="LoginForm" input="/jsp/welcome.jsp" scope="request">
+            <forward name="WelcomePage" path="/jsp/welcome.jsp" redirect="false"/>
+            <forward name="SitterHomePage" path="/sitter/homepage.do" redirect="true"/>
+            <forward name="SeekerHomePage" path="/seeker/homepage.do" redirect="true"/>
+        </action>
+
+        <!-- home page -->
+
+        <action path="/seekerhomepage" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/seeker_homepage.jsp" validate="false" name="MemberForm" />
+
+        <action path="/sitterhomepage" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/sitter_homepage.jsp" validate="false" name="MemberForm" />
+
+        <action path="/sitter/homepage" type="com.minicare.controller.sitter.SitterHomePage"
+                validate="false" scope="request">
+            <forward name="SitterHome" path="/jsp/sitter_homepage.jsp" redirect="false"/>
+        </action>
+
+        <action path="/seeker/homepage" type="com.minicare.controller.seeker.SeekerHomePage"
+                validate="false" scope="request">
+            <forward name="SeekerHome" path="/jsp/seeker_homepage.jsp" redirect="false"/>
+        </action>
+
+        <!-- register actions -->
+
+        <action path="/sitterregisterpage" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/sitter_register.jsp" validate="false" name="MemberForm"/>
+
+        <action path="/seekerregisterpage" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/seeker_register.jsp" validate="false" name="MemberForm"/>
+
+        <action path="/sitterregister" validate="true" type="com.minicare.controller.sitter.RegisterAction"
+                name="SitterForm" input="/jsp/sitter_register.jsp" scope="request" >
+            <forward name="SitterRegister" path="/jsp/sitter_register.jsp" redirect="false"/>
+            <forward name="SitterHomePage" path="/sitter/homepage.do" redirect="true"/>
+        </action>
+
+        <action path="/seekerregister" validate="true" type="com.minicare.controller.seeker.RegisterAction"
+                name="SeekerForm" input="/jsp/seeker_register.jsp" scope="request" >
+            <forward name="SeekerRegister" path="/jsp/seeker_register.jsp" redirect="false" />
+            <forward name="SeekerHomePage" path="/seeker/homepage.do" redirect="true" />
+        </action>
+
+        <!-- edit account -->
+
+        <action path="/seeker/editaccountform" type="com.minicare.controller.seeker.EditAccountFormAction"
+                validate="false" name="SeekerForm" scope="request" >
+            <forward name="/editAccountForm" path="/jsp/editSeekerAccount.jsp" />
+        </action>
+
+        <action path="/seeker/editaccount" type="com.minicare.controller.seeker.EditAccountAction"
+                validate="true" name="SeekerForm" scope="request" input="/jsp/editSeekerAccount.jsp" >
+            <forward name="/seekerhomepage" path="/jsp/seeker_homepage.jsp" redirect="false" />
+        </action>
+
+
+
+    </action-mappings>
+
+    <message-resources parameter="ErrorResources" />
+</struts-config>
