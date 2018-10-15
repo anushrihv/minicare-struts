@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
+
 <style>
 
     input[type=submit] {
@@ -21,53 +24,55 @@
     <body>
         <h1 style="text-align:center"> EDIT ACCOUNT </h1>
         <div align="right">
-            <form action="/minicare-1.0-SNAPSHOT/jsp/sitter_homepage.jsp">
-                <input type="submit" value="HOME PAGE">
-            </form>
+            <html:form action="/sitterhomepage">
+                <html:submit value="HOME PAGE" />
+            </html:form>
         </div>
         <div align="center">
-        <form action="/minicare-1.0-SNAPSHOT/sitter/editaccount.do" method="post">
+        <html:form action="/sitter/editaccount" method="post">
 
             <table>
                 <tr>
                     <td>First Name :</td>
-                    <td><input type="text" name="firstname" value="${SitterFormBean.firstname}"></td>
-                    <td class="error"> ${FirstNameError} </td>
+                    <td> <html:text property="firstname" /> </td>
+                    <td class="error"> <html:errors property="FirstNameError" /> </td>
                 </tr>
                 <tr>
                     <td>Last Name :</td>
-                    <td><input type="text" name="lastname" value="${SitterFormBean.lastname}"></td>
-                    <td class="error"> ${LastNameError} </td>
+                    <td> <html:text property="lastname" /> </td>
+                    <td class="error"> <html:errors property="LastNameError" /> </td>
                 </tr>
                 <tr>
                     <td>Phone Number : </td>
-                    <td> <input type="text" name="phonenumber" value="${SitterFormBean.phonenumber}"></td>
-                    <td class="error"> ${PhoneNumberError} </td>
+                    <td> <html:text property="phonenumber" /> </td>
+                    <td class="error"> <html:errors property="PhoneNumberError" />  </td>
                 </tr>
 
                 <tr>
                     <td> Address : </td>
-                    <td> <textarea rows="4" cols="30" name="address" >${SitterFormBean.address.trim()}</textarea> </td>
-                    <td class="error"> ${AddressError} </td>
+                    <td> <html:textarea rows="4" cols="30" property="address" /> </td>
+                    <td class="error"> <html:errors property="AddressError" />  </td>
                 </tr>
                 <tr>
                     <td> Years of Experience : </td>
-                    <td> <input type="text" name="yearsofexperience" value="${SitterFormBean.yearsOfExperience}"> </td>
-                    <td class="error"> ${YearsOfExperienceError} </td>
+                    <td> <html:text property="yearsOfExperience" /> </td>
+                    <td class="error"> <html:errors property="YearsOfExperienceError" />  </td>
                 </tr>
                 <tr>
                     <td> Expected Pay : </td>
-                    <td> <input type="text" name="expectedpay" value="${SitterFormBean.expectedPay}"></td>
-                    <td class="error"> ${ExpectedPayError} </td>
+                    <td> <html:text property="expectedPay" /> </td>
+                    <td class="error"> <html:errors property="ExpectedPayError" />  </td>
                 </tr>
-                <input type="hidden" name="type" value="Sitter" > </td>
-                <input type="hidden" name="memberId" value="${CurrentUser.memberId}">
-                <input type="hidden" name="email" value="${CurrentUser.email}">
-                <input type="hidden" name="password" value="${CurrentUser.password}">
-                <input type="hidden" name="password2" value="${CurrentUser.password}">
+                <html:hidden name="SitterForm" property="type" />
+                <html:hidden property="memberId" />
+                <html:hidden property="email" />
+                <html:hidden property="password" />
+                <html:hidden property="editform" value="true" />
+
             </table>
-            <input type="submit" value="SAVE">
-        </form></div>
+            <html:submit value="SAVE" />
+        </html:form>
+        </div>
 
     </body>
 </html>

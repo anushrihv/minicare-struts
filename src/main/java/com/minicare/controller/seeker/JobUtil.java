@@ -1,8 +1,8 @@
 package com.minicare.controller.seeker;
 
-import com.minicare.dto.JobFormBean;
-import com.minicare.model.JobModel;
-import com.minicare.model.MemberModel;
+import com.minicare.dto.JobForm;
+import com.minicare.model.Job;
+import com.minicare.model.Member;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -22,50 +22,48 @@ public class JobUtil {
         return jobUtil;
     }
 
-    public JobFormBean populateJobFormBean(HttpServletRequest request)  {
-        MemberModel memberModel = (MemberModel) request.getSession().getAttribute("CurrentUser");
-        JobFormBean jobFormBean = new JobFormBean();
-        jobFormBean.setId(request.getParameter("jobid"));
-        jobFormBean.setJobTitle(request.getParameter("jobtitle"));
-        jobFormBean.setStartDate(request.getParameter("startdate"));
-        jobFormBean.setStartTime(request.getParameter("starttime"));
-        jobFormBean.setEndDate(request.getParameter("enddate"));
-        jobFormBean.setEndTime(request.getParameter("endtime"));
-        jobFormBean.setStartDateTime();
-        jobFormBean.setEndDateTime();
-        jobFormBean.setPayPerHour(request.getParameter("payperhour"));
-        jobFormBean.setPostedBy(String.valueOf(memberModel.getMemberId()));
-        request.setAttribute("JobFormBean",jobFormBean);
-        return jobFormBean;
+    public JobForm populateJobFormBean(HttpServletRequest request)  {
+        Member member = (Member) request.getSession().getAttribute("CurrentUser");
+        JobForm jobForm = new JobForm();
+        jobForm.setId(request.getParameter("jobid"));
+        jobForm.setJobTitle(request.getParameter("jobtitle"));
+        jobForm.setStartDate(request.getParameter("startdate"));
+        jobForm.setStartTime(request.getParameter("starttime"));
+        jobForm.setEndDate(request.getParameter("enddate"));
+        jobForm.setEndTime(request.getParameter("endtime"));
+        jobForm.setStartDateTime();
+        jobForm.setEndDateTime();
+        jobForm.setPayPerHour(request.getParameter("payperhour"));
+        jobForm.setPostedBy(String.valueOf(member.getMemberId()));
+        request.setAttribute("JobForm", jobForm);
+        return jobForm;
     }
 
-    public JobModel populateJobModelFromRequest(HttpServletRequest request){
-        JobModel jobModel = new JobModel();
-        JobFormBean jobFormBean = (JobFormBean) request.getAttribute("JobFormBean");
-        Timestamp startDateTime = Timestamp.valueOf(jobFormBean.getStartDateTime());
-        Timestamp endDateTime = Timestamp.valueOf(jobFormBean.getEndDateTime());
-        double payPerHour = Double.parseDouble(jobFormBean.getPayPerHour());
+    public Job populateJobModel(JobForm jobForm){
+        Job job = new Job();
+        Timestamp startDateTime = Timestamp.valueOf(jobForm.getStartDateTime());
+        Timestamp endDateTime = Timestamp.valueOf(jobForm.getEndDateTime());
+        double payPerHour = Double.parseDouble(jobForm.getPayPerHour());
 
-        jobModel.setJobTitle(jobFormBean.getJobTitle());
-        jobModel.setStartDateTime(startDateTime);
-        jobModel.setEndDateTime(endDateTime);
-        jobModel.setPayPerHour(payPerHour);
+        job.setJobTitle(jobForm.getJobTitle());
+        job.setStartDateTime(startDateTime);
+        job.setEndDateTime(endDateTime);
+        job.setPayPerHour(payPerHour);
 
-        request.setAttribute("JobModel",jobModel);
-        return jobModel;
+        return job;
     }
 
-    public JobFormBean populateJobFormFromModel(JobModel jobModel){
-        JobFormBean jobFormBean = new JobFormBean();
-        jobFormBean.setId(String.valueOf(jobModel.getId()));
-        jobFormBean.setJobTitle(jobModel.getJobTitle());
-        jobFormBean.setStartDate(jobModel.getStartDateTime().toString().split(" ")[0]);
-        jobFormBean.setStartTime(jobModel.getStartDateTime().toString().split(" ")[1].substring(0,5));
-        jobFormBean.setEndDate(jobModel.getEndDateTime().toString().split(" ")[0]);
-        jobFormBean.setEndTime(jobModel.getEndDateTime().toString().split(" ")[1].substring(0,5));
-        jobFormBean.setStartDateTime();
-        jobFormBean.setEndDateTime();
-        jobFormBean.setPayPerHour(String.valueOf(jobModel.getPayPerHour()));
-        return jobFormBean;
+    public void populateJobFormFromModel(Job job, JobForm jobForm){
+
+        jobForm.setId(String.valueOf(job.getId()));
+        jobForm.setJobTitle(job.getJobTitle());
+        jobForm.setStartDate(job.getStartDateTime().toString().split(" ")[0]);
+        jobForm.setStartTime(job.getStartDateTime().toString().split(" ")[1].substring(0,5));
+        jobForm.setEndDate(job.getEndDateTime().toString().split(" ")[0]);
+        jobForm.setEndTime(job.getEndDateTime().toString().split(" ")[1].substring(0,5));
+        jobForm.setStartDateTime();
+        jobForm.setEndDateTime();
+        jobForm.setPayPerHour(String.valueOf(job.getPayPerHour()));
+
     }
 }

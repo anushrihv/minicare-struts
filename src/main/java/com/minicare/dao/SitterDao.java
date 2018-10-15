@@ -1,9 +1,8 @@
 package com.minicare.dao;
 
-import com.minicare.model.MemberModel;
-import com.minicare.model.SeekerModel;
-import com.minicare.model.SitterModel;
-import com.minicare.model.Status;
+import com.minicare.model.*;
+import com.minicare.model.Member;
+import com.minicare.model.Sitter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,16 +26,16 @@ public class SitterDao{
         return sitterDao;
     }
 
-    public void insertSitter(SitterModel sitterModel) throws ClassNotFoundException, SQLException {
+    public void insertSitter(Sitter sitterModel) throws ClassNotFoundException, SQLException {
         Connection connection = JDBCHelper.getConnection();
         PreparedStatement preparedStatement;
         MemberDao memberDao = MemberDao.getInstance();
         memberDao.insertMember(connection,sitterModel);
 
-        Set<MemberModel> memberModelSet = memberDao.getMember(sitterModel.getEmail());
-        Iterator<MemberModel> iterator = memberModelSet.iterator();
-        MemberModel memberModel = iterator.next();
-        int id = memberModel.getMemberId();
+        Set<Member> memberSet = memberDao.getMember(sitterModel.getEmail());
+        Iterator<Member> iterator = memberSet.iterator();
+        Member member = iterator.next();
+        int id = member.getMemberId();
 
         String sql = "insert into sitter(MemberId,YearsOfExperience,ExpectedPay) values (?,?,?)";
         preparedStatement = connection.prepareStatement(sql);
@@ -61,8 +60,8 @@ public class SitterDao{
         try { connection.close(); } catch (Exception e) { /* ignored */ }
     }
 
-    public SitterModel getSitter(int sitterId) throws ClassNotFoundException,SQLException{
-        SitterModel sitterModel = new SitterModel();
+    public Sitter getSitter(int sitterId) throws ClassNotFoundException,SQLException{
+        Sitter sitterModel = new Sitter();
         Connection connection = JDBCHelper.getConnection();
         String sql = "select MemberId,YearsOfExperience,ExpectedPay from sitter where MemberId=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -79,7 +78,7 @@ public class SitterDao{
         return sitterModel;
     }
 
-    public void editSitter(SitterModel sitterModel) throws ClassNotFoundException, SQLException{
+    public void editSitter(Sitter sitterModel) throws ClassNotFoundException, SQLException{
         Connection connection = JDBCHelper.getConnection();
         String sql = "update sitter SET YearsOfExperience=? , ExpectedPay=? where MemberId=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);

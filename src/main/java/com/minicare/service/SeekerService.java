@@ -5,9 +5,10 @@ import com.minicare.dao.JobDao;
 import com.minicare.dao.MemberDao;
 import com.minicare.dao.SeekerDao;
 import com.minicare.dto.SeekerForm;
-import com.minicare.model.JobModel;
-import com.minicare.model.MemberModel;
-import com.minicare.model.SeekerModel;
+import com.minicare.model.Job;
+import com.minicare.model.Member;
+import com.minicare.model.Seeker;
+
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,12 +31,12 @@ public class SeekerService {
         return seekerService;
     }
 
-    public List<JobModel> getJobsById(HttpServletRequest request) throws SQLException,ClassNotFoundException{
+    public List<Job> getJobsById(HttpServletRequest request) throws SQLException,ClassNotFoundException{
         HttpSession session = request.getSession(false);
         jobDao = JobDao.getInstance();
-        MemberModel memberModel = (MemberModel)session.getAttribute("CurrentUser");
-        List<JobModel> jobModelList= jobDao.getJobsById(memberModel);
-        return jobModelList;
+        Member member = (Member)session.getAttribute("CurrentUser");
+        List<Job> jobList = jobDao.getJobsById(member);
+        return jobList;
     }
 
     public void closeSeekerAccount(int seekerId) throws NamingException,SQLException{
@@ -43,18 +44,18 @@ public class SeekerService {
         memberDao.deleteMember(seekerId);
     }
 
-    public SeekerModel getSeeker(int seekerId) throws ClassNotFoundException,SQLException{
+    public Seeker getSeeker(int seekerId) throws ClassNotFoundException,SQLException{
         SeekerDao seekerDao = SeekerDao.getInstance();
         return seekerDao.getSeeker(seekerId);
     }
 
 
-    public SeekerModel editSeekerAccount(SeekerForm seekerForm) throws ClassNotFoundException,SQLException, NamingException {
+    public Seeker editSeekerAccount(SeekerForm seekerForm) throws ClassNotFoundException,SQLException, NamingException {
         SeekerUtil seekerUtil = SeekerUtil.getInstance();
         SeekerDao seekerDao = SeekerDao.getInstance();
         MemberDao memberDao = MemberDao.getInstance();
 
-        SeekerModel seekerModel = seekerUtil.populateSeekerModel(seekerForm);
+        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm);
         seekerDao.editSeeker(seekerModel);
         memberDao.editMember(seekerModel);
         return seekerModel;

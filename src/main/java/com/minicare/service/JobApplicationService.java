@@ -1,10 +1,9 @@
 package com.minicare.service;
 
 import com.minicare.dao.JobApplicationDao;
-import com.minicare.dao.JobDao;
 import com.minicare.dto.JobApplicationDTO;
-import com.minicare.model.JobApplicationModel;
-import com.minicare.model.MemberModel;
+import com.minicare.model.JobApplication;
+import com.minicare.model.Member;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,27 +29,27 @@ public class JobApplicationService {
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
 
         populateJobApplicationModel(request,jobId,expectedPay);
-        JobApplicationModel jobApplicationModel = (JobApplicationModel) request.getAttribute("JobApplicationModel");
-        jobApplicationDao.storeJobApplication(jobApplicationModel);
+        JobApplication jobApplication = (JobApplication) request.getAttribute("JobApplication");
+        jobApplicationDao.storeJobApplication(jobApplication);
 //        List<JobApplicationDTO> jobApplicationDTOList = getJobApplicationList(request);
 //        return jobApplicationDTOList;
     }
 
     private void populateJobApplicationModel(HttpServletRequest request , int jobId , double expectedPay){
-        MemberModel memberModel = (MemberModel) request.getSession().getAttribute("CurrentUser");
+        Member member = (Member) request.getSession().getAttribute("CurrentUser");
 
-        JobApplicationModel jobApplicationModel = new JobApplicationModel();
-        jobApplicationModel.setJobId(jobId);
-        jobApplicationModel.setMemberId(memberModel.getMemberId());
-        jobApplicationModel.setExpectedPay(expectedPay);
+        JobApplication jobApplication = new JobApplication();
+        jobApplication.setJobId(jobId);
+        jobApplication.setMemberId(member.getMemberId());
+        jobApplication.setExpectedPay(expectedPay);
 
-        request.setAttribute("JobApplicationModel",jobApplicationModel);
+        request.setAttribute("JobApplication", jobApplication);
     }
 
     public List<JobApplicationDTO> getJobApplicationList(HttpServletRequest request) throws SQLException,NamingException{
-        MemberModel memberModel = (MemberModel) request.getSession().getAttribute("CurrentUser");
+        Member member = (Member) request.getSession().getAttribute("CurrentUser");
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
-        List<JobApplicationDTO> jobApplicationDTOList = jobApplicationDao.getJobApplicationList(memberModel.getMemberId());
+        List<JobApplicationDTO> jobApplicationDTOList = jobApplicationDao.getJobApplicationList(member.getMemberId());
         return jobApplicationDTOList;
     }
 

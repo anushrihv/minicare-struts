@@ -55,16 +55,6 @@ public class SitterForm extends MemberForm {
 
         }
 
-        try {
-            if (actionErrors.isEmpty()) {
-                MemberService memberService = MemberService.getInstance();
-                if (!memberService.uniqueEmail(getEmail())) {
-                    actionErrors.add("EmailError", new ActionMessage("error.email.exists"));
-                }
-            }
-        }catch (Exception e){
-            throw new MiniCareException(e);
-        }
 
        return actionErrors;
     }

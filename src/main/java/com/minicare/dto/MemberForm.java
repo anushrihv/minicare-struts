@@ -1,5 +1,7 @@
 package com.minicare.dto;
 
+import com.minicare.exception.MiniCareException;
+import com.minicare.service.MemberService;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;

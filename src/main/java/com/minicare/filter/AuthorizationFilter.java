@@ -1,7 +1,7 @@
 package com.minicare.filter;
 
 import com.minicare.exception.MiniCareException;
-import com.minicare.model.MemberModel;
+import com.minicare.model.Member;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +23,8 @@ public class AuthorizationFilter implements Filter {
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             String url = String.valueOf(request.getRequestURL());
             HttpSession session = request.getSession(false);
-            MemberModel memberModel = (MemberModel) session.getAttribute("CurrentUser");
-            String type = memberModel.getType().name();
+            Member member = (Member) session.getAttribute("CurrentUser");
+            String type = member.getType().name();
             if(url.contains("/sitter") && type.equals("SEEKER")){
 
                 response.sendRedirect("/minicare-1.0-SNAPSHOT/seeker/homepage.do");

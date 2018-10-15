@@ -1,5 +1,9 @@
 <%@page import="java.util.*,com.minicare.model.JobModel" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+<%@ taglib prefix="bean" uri="http://struts.apache.org/tags-bean" %>
+
 <style>
 input[type=submit] {
     background-color: #555555; /*black*/
@@ -30,7 +34,7 @@ text-align:center
 <html>
     <body>
         <h1>LIST OF JOBS</h1>
-         <div align="right"><form action="/minicare-1.0-SNAPSHOT/jsp/sitter_homepage.jsp" > <input type="submit" value="HOME" > </form></div>
+         <div align="right"><html:form action="/sitterhomepage" > <html:submit value="HOME" /> </html:form></div>
          <c:choose>
          <c:when test="${JobList.size()==0}">
          <h2 align="center"> NO JOBS TO DISPLAY </h2>
@@ -50,11 +54,11 @@ text-align:center
                 <td><c:out value="${Job.endDateTime}" /></td>
                 <td><c:out value="${Job.payPerHour}" /></td>
                 <td>
-                    <form action="/minicare-1.0-SNAPSHOT/sitter/applyjob.do" method="post">
-                        <input type="hidden" name="JobId" value="${Job.id}">
-                        <input type="hidden" name="MemberId" value="${CurrentUser.memberId}">
-                        <input type="submit" value="Apply" >
-                    </form>
+                    <html:form action="/sitter/applyjobform.do" method="post">
+                        <html:hidden property="id" value="${Job.id}" />
+                        <html:hidden property="MemberId" value="${CurrentUser.memberId}" />
+                        <html:submit value="Apply" />
+                    </html:form>
                 </td>
             </tr>
             </c:forEach>

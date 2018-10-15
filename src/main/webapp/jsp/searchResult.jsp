@@ -1,5 +1,9 @@
 <%@page import="java.util.*,com.minicare.model.MemberModel" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+<%@ taglib prefix="bean" uri="http://struts.apache.org/tags-bean" %>
+
 
 <style>
 input[type=submit] {
@@ -29,10 +33,10 @@ th, td {
 <html>
     <body>
     <c:if test="${CurrentUser.type=='SITTER'}">
-        <div align="right"><form action="/minicare-1.0-SNAPSHOT/jsp/sitter_homepage.jsp" > <input type="submit" value="HOME" > </form></div>
+        <div align="right"><html:form action="/sitterhomepage" > <html:submit value="HOME" /> </html:form></div>
     </c:if>
     <c:if test="${CurrentUser.type=='SEEKER'}">
-       <div align="right"><form action="/minicare-1.0-SNAPSHOT/jsp/seeker_homepage.jsp" > <input type="submit" value="HOME" > </form></div>
+       <div align="right"><html:form action="/seekerhomepage" > <html:submit value="HOME" /> </html:form></div>
     </c:if>
     <c:choose>
         <c:when test="${SearchResultSet.size()==0}">

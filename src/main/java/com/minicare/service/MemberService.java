@@ -2,12 +2,13 @@ package com.minicare.service;
 
 import com.minicare.dao.MemberDao;
 import com.minicare.dto.PasswordHashHelper;
-import com.minicare.model.MemberModel;
+import com.minicare.model.Member;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -28,8 +29,8 @@ public class MemberService {
 
     public  boolean uniqueEmail(String email) throws ClassNotFoundException, SQLException {
         MemberDao memberDao = MemberDao.getInstance();
-        Set<MemberModel> memberModelSet = memberDao.getMember(email);
-        Iterator<MemberModel> iterator = memberModelSet.iterator();
+        Set<Member> memberSet = memberDao.getMember(email);
+        Iterator<Member> iterator = memberSet.iterator();
         if(iterator.hasNext()){
             return false;
         }
@@ -37,24 +38,26 @@ public class MemberService {
             return true;
     }
 
-    public boolean checkPassword(HttpServletRequest request) {
+    public ActionErrors checkPassword(HttpServletRequest request) {
+        ActionErrors actionErrors = new ActionErrors();
         boolean status=true;
-        MemberModel memberModel = (MemberModel) request.getSession().getAttribute("CurrentUser");
+        Member member = (Member) request.getSession().getAttribute("CurrentUser");
         String currentPasswordHash = PasswordHashHelper.get_SHA_256_SecurePassword(request.getParameter("oldpassword"));
         request.setAttribute("OldPassword",request.getParameter("oldpassword"));
         request.setAttribute("NewPassword",request.getParameter("newpassword"));
         request.setAttribute("NewPassword2",request.getParameter("newpassword2"));
-        if(!memberModel.getPassword().equals(currentPasswordHash)){
-            request.setAttribute("OldPasswordError","Incorrect password");
-            status = false;
+        if(!member.getPassword().equals(currentPasswordHash)){
+            actionErrors.add("OldPasswordError",new ActionMessage("error.password.incorrect"));
+            //status = false;
         }if(request.getParameter("oldpassword").equals(request.getParameter("newpassword"))){
-            request.setAttribute("NewPasswordError","New password cannot be the same as old password");
-            return false;
+            actionErrors.add("NewPasswordError",new ActionMessage("error.password.different"));
+            return actionErrors;
+            //return false;
         }if(!request.getParameter("newpassword").equals(request.getParameter("newpassword2"))){
-            request.setAttribute("NewPasswordError","Passwords don't match");
-            status = false;
+            actionErrors.add("NewPassword2Error",new ActionMessage("error.password.match"));
+            //status = false;
         }
-        return status;
+        return actionErrors;
     }
 
     public void updatePassword(int memberId , String newPassword) throws NamingException, SQLException{
@@ -63,12 +66,12 @@ public class MemberService {
         memberDao.updatePassword(memberId,newPasswordHash);
     }
 
-    public Set<MemberModel> searchMember(String email) throws NamingException, SQLException {
+    public Set<Member> searchMember(String email) throws NamingException, SQLException {
         MemberDao memberDao = MemberDao.getInstance();
-//        Set<MemberModel> memberModelSet = memberDao.getAllMembers();
-//        Set<MemberModel> searchResultSet = new HashSet<>();
-//        Iterator<MemberModel> iterator = memberModelSet.iterator();
-//        MemberModel memberModel;
+//        Set<Member> memberSet = memberDao.getAllMembers();
+//        Set<Member> searchResultSet = new HashSet<>();
+//        Iterator<Member> iterator = memberSet.iterator();
+//        Member memberModel;
 //        while(iterator.hasNext()){
 //            memberModel = iterator.next();
 //            String dbemail = memberModel.getEmail();
@@ -78,7 +81,7 @@ public class MemberService {
 //        }
 //        return searchResultSet;
 
-        Set<MemberModel> memberModelSet = memberDao.searchMember(email);
-        return memberModelSet;
+        Set<Member> memberSet = memberDao.searchMember(email);
+        return memberSet;
     }
 }

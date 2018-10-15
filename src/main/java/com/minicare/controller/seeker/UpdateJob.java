@@ -1,56 +1,73 @@
 package com.minicare.controller.seeker;
 
+import com.minicare.dto.JobForm;
 import com.minicare.exception.MiniCareException;
-import com.minicare.dto.JobFormBean;
-import com.minicare.model.JobModel;
-import com.minicare.model.MemberModel;
+import com.minicare.model.Job;
+import com.minicare.model.Member;
 import com.minicare.service.JobService;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UpdateJob extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        action(req,resp);
-    }
+public class UpdateJob extends Action {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        action(req,resp);
-    }
-
-    private void action(HttpServletRequest req, HttpServletResponse resp) {
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest req, HttpServletResponse resp) throws Exception {
         try {
-            int jobId = Integer.parseInt(req.getParameter("jobid"));
+            JobForm jobForm = (JobForm) form ;
+            int jobId = Integer.parseInt(jobForm.getId());
             JobService jobService = JobService.getInstance();
             JobUtil jobUtil = JobUtil.getInstance();
-            JobModel jobModel = jobService.getJobByJobId(jobId);
-            MemberModel memberModel = (MemberModel) req.getSession(false).getAttribute("CurrentUser");
-            if(memberModel.getMemberId()!=jobModel.getPostedBy()){
+            Job job = jobService.getJobByJobId(jobId);
+            Member member = (Member) req.getSession(false).getAttribute("CurrentUser");
+            if(member.getMemberId()!= job.getPostedBy()){
                 throw new MiniCareException("YOU ARE NOT AUTHORISED TO ACCESS THIS RESOURCE");
             }
-            req.setAttribute("JobModel",jobModel);
-            JobFormBean jobFormBean = jobUtil.populateJobFormBean(req);
-            //JobFormBean jobFormBean = (JobFormBean) req.getAttribute("JobFormBean");
-            if(!jobFormBean.validate(req)){
-                getServletContext().getRequestDispatcher("/jsp/editJob.jsp").forward(req,resp);
-            }else {
-                jobService.updateJob(jobFormBean);
-                List<JobModel> jobModelList = jobService.getJobsById(memberModel);
-                req.setAttribute("JobList", jobModelList);
-                getServletContext().getRequestDispatcher("/jsp/listJobs.jsp").forward(req, resp);
-            }
+            req.setAttribute("Job", job);
+            jobService.updateJob(jobForm);
+            List<Job> jobList = jobService.getJobsById(member);
+            req.setAttribute("JobList", jobList);
+            return mapping.findForward("listjobs");
+            //}
         }catch (Exception e){
             Logger logger = Logger.getLogger("UpdateJob");
             logger.log(Level.SEVERE,"exception occurred",e);
             throw new MiniCareException(e);
         }
     }
+
+//    private void action(HttpServletRequest req, HttpServletResponse resp) {
+//        try {
+//            int jobId = Integer.parseInt(req.getParameter("jobid"));
+//            JobService jobService = JobService.getInstance();
+//            JobUtil jobUtil = JobUtil.getInstance();
+//            Job jobModel = jobService.getJobByJobId(jobId);
+//            Member memberModel = (Member) req.getSession(false).getAttribute("CurrentUser");
+//            if(memberModel.getMemberId()!=jobModel.getPostedBy()){
+//                throw new MiniCareException("YOU ARE NOT AUTHORISED TO ACCESS THIS RESOURCE");
+//            }
+//            req.setAttribute("Job",jobModel);
+//            JobForm jobForm = jobUtil.populateJobFormBean(req);
+//            //JobForm jobForm = (JobForm) req.getAttribute("JobForm");
+////            if(!jobForm.validate(req)){
+////                getServletContext().getRequestDispatcher("/jsp/editJob.jsp").forward(req,resp);
+////            }else {
+//                jobService.updateJob(jobForm);
+//                List<Job> jobModelList = jobService.getJobsById(memberModel);
+//                req.setAttribute("JobList", jobModelList);
+//                getServletContext().getRequestDispatcher("/jsp/listJobs.jsp").forward(req, resp);
+//            //}
+//        }catch (Exception e){
+//            Logger logger = Logger.getLogger("UpdateJob");
+//            logger.log(Level.SEVERE,"exception occurred",e);
+//            throw new MiniCareException(e);
+//        }
+//    }
 }

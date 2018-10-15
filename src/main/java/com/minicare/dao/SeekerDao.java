@@ -1,7 +1,8 @@
 package com.minicare.dao;
 
-import com.minicare.model.MemberModel;
-import com.minicare.model.SeekerModel;
+import com.minicare.model.Member;
+import com.minicare.model.Seeker;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,15 +26,15 @@ public class SeekerDao {
         return seekerDao;
     }
 
-    public void insertSeeker(SeekerModel seekerModel) throws ClassNotFoundException, SQLException {
+    public void insertSeeker(Seeker seekerModel) throws ClassNotFoundException, SQLException {
             Connection connection = JDBCHelper.getConnection();
             MemberDao memberDao = MemberDao.getInstance();
             memberDao.insertMember(connection, seekerModel);
 
-            Set<MemberModel> memberModelSet = memberDao.getMember(seekerModel.getEmail());
-            Iterator<MemberModel> iterator = memberModelSet.iterator();
-            MemberModel memberModel = iterator.next();
-            int id = memberModel.getMemberId();
+            Set<Member> memberSet = memberDao.getMember(seekerModel.getEmail());
+            Iterator<Member> iterator = memberSet.iterator();
+            Member member = iterator.next();
+            int id = member.getMemberId();
 
             String sql = "insert into seeker(MemberId,NumberOfChildren,SpouseName) values (?,?,?)";
             preparedStatement = connection.prepareStatement(sql);
@@ -46,8 +47,8 @@ public class SeekerDao {
             try { JDBCHelper.closeConnection(); } catch (Exception e) { /* ignored */ }
     }
 
-    public SeekerModel getSeeker(int seekerId) throws ClassNotFoundException, SQLException{
-        SeekerModel seekerModel = new SeekerModel();
+    public Seeker getSeeker(int seekerId) throws ClassNotFoundException, SQLException{
+        Seeker seekerModel = new Seeker();
         Connection connection = JDBCHelper.getConnection();
         String sql = "select MemberId,NumberOfChildren,SpouseName from seeker where MemberId=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -64,7 +65,7 @@ public class SeekerDao {
         return seekerModel;
     }
 
-    public void editSeeker(SeekerModel seekerModel) throws ClassNotFoundException, SQLException{
+    public void editSeeker(Seeker seekerModel) throws ClassNotFoundException, SQLException{
         Connection connection = JDBCHelper.getConnection();
         String sql = "update seeker SET NumberOfChildren=? , SpouseName=? where MemberId=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);

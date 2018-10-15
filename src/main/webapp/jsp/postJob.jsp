@@ -1,3 +1,9 @@
+<%@page import="java.util.*,com.minicare.model.JobModel" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+<%@ taglib prefix="bean" uri="http://struts.apache.org/tags-bean" %>
+
 <style>
  input[type=submit] {
     background-color: #555555; /*black*/
@@ -20,35 +26,34 @@ text-align : center;
 <html>
     <body>
         <h1>POST JOB</h1>
-        <div align="right"><form action="/minicare-1.0-SNAPSHOT/jsp/seeker_homepage.jsp" class="button"> <input type="submit" value="HOME" > </form></div>
-        <div align ="center"><form action="/minicare-1.0-SNAPSHOT/seeker/postjob.do" mathod="post">
+        <div align="right"><html:form action="/seekerhomepage" > <html:submit value="HOME" /> </html:form></div>
+        <div align ="center"><html:form action="/seeker/postjob.do" method="post">
             <table>
                 <tr>
                     <td>Job Title : </td>
-                    <td> <input type="text" name="jobtitle" value="${JobFormBean.jobTitle}" required> </td>
-                    <td class="error"> ${JobTitleError} </td>
+                    <td> <html:text property="jobTitle" /> </td>
+                    <td class="error"> <html:errors property="JobTitleError" /> </td>
                 </tr>
                 <tr>
                     <td>Start Date Time :</td>
-                    <td> <input type="date" name="startdate" value="${JobFormBean.startDate}" required> </td>
-                    <td> <input type="time" name="starttime" value="${JobFormBean.startTime}" required> </td>
-                    <td class="error"> ${StartDateTimeError} </td>
+                    <td> <input type="date" name="startDate" value="${JobForm.startDate}" required> </td>
+                    <td> <input type="time" name="startTime" value="${JobForm.startTime}" required> </td>
+                    <td class="error"> <html:errors property="StartDateTimeError" /> </td>
                 </tr>
                 <tr>
                     <td>End Date Time :</td>
-                    <td> <input type="date" name="enddate" value="${JobFormBean.endDate}" required> </td>
-                    <td> <input type="time" name="endtime" value="${JobFormBean.endTime}" required> </td>
-                    <td class="error"> ${EndDateTimeError} </td>
+                    <td> <input type="date" name="endDate" value="${JobForm.endDate}" required> </td>
+                    <td> <input type="time" name="endTime" value="${JobForm.endTime}" required> </td>
+                    <td class="error"> <html:errors property="EndDateTimeError" /> </td>
                 </tr>
                 <tr>
                     <td>Pay Per Hour :</td>
-                    <td> <input type="text" name="payperhour" value="${JobFormBean.payPerHour}" required> </td>
-                    <td class="error"> ${PayPerHourError} </td>
+                    <td> <html:text property="payPerHour" /> </td>
+                    <td class="error"> <html:errors property="PayPerHourError" /> </td>
                 </tr>
 
             </table>
-            <input type="hidden" name="memberId" value="${CurrentUser.memberId}">
-            <input type="submit" value="Submit">
-        </form></div>
+            <html:submit value="Submit" />
+        </html:form></div>
     </body>
 </html>

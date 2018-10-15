@@ -1,7 +1,6 @@
 package com.minicare.dao;
 
-import com.minicare.model.MemberModel;
-import com.minicare.model.SeekerModel;
+import com.minicare.model.Member;
 import com.minicare.model.Status;
 import com.minicare.model.Type;
 
@@ -28,29 +27,29 @@ public class MemberDao {
         return memberDao;
     }
 
-    public void insertMember(Connection connection, MemberModel memberModel) throws SQLException{
+    public void insertMember(Connection connection, Member member) throws SQLException{
 
             PreparedStatement preparedStatement;
 
             String sql = "insert into member(FirstName,LastName,PhoneNumber,EmailAddress,Type,Address,Password) values(?,?,?,?,?,?,?)";
 
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, memberModel.getFirstName());
-            preparedStatement.setString(2, memberModel.getLastName());
-            preparedStatement.setLong(3, memberModel.getPhoneNumber());
-            preparedStatement.setString(4, memberModel.getEmail());
-            preparedStatement.setString(5, memberModel.getType().name());
-            preparedStatement.setString(6, memberModel.getAddress());
-            preparedStatement.setString(7, memberModel.getPassword());
+            preparedStatement.setString(1, member.getFirstName());
+            preparedStatement.setString(2, member.getLastName());
+            preparedStatement.setLong(3, member.getPhoneNumber());
+            preparedStatement.setString(4, member.getEmail());
+            preparedStatement.setString(5, member.getType().name());
+            preparedStatement.setString(6, member.getAddress());
+            preparedStatement.setString(7, member.getPassword());
             preparedStatement.executeUpdate();
 
     }
 
-    public Set<MemberModel> getMember(String email) throws SQLException,ClassNotFoundException {
+    public Set<Member> getMember(String email) throws SQLException,ClassNotFoundException {
         Connection connection = JDBCHelper.getConnection();
         PreparedStatement preparedStatement;
         ResultSet resultSet;
-        Set<MemberModel> memberModelSet = new HashSet<MemberModel>();
+        Set<Member> memberSet = new HashSet<Member>();
         String sql = "select * from member where EmailAddress = ? and Status=?";
 
         preparedStatement = connection.prepareStatement(sql);
@@ -60,17 +59,17 @@ public class MemberDao {
         while(true){
             boolean contains = resultSet.next();
             if(contains){
-                MemberModel memberModel = new MemberModel();
-                memberModel.setMemberId(resultSet.getInt("Id"));
-                memberModel.setFirstName(resultSet.getString("FirstName"));
-                memberModel.setLastName(resultSet.getString("LastName"));
-                memberModel.setPhoneNumber(resultSet.getLong("PhoneNumber"));
-                memberModel.setEmail(resultSet.getString("EmailAddress"));
-                memberModel.setType(Type.valueOf(resultSet.getString("Type")));
-                memberModel.setAddress(resultSet.getString("Address"));
-                memberModel.setStatus(Status.valueOf(resultSet.getString("Status")));
-                memberModel.setPassword(resultSet.getString("Password"));
-                memberModelSet.add(memberModel);
+                Member member = new Member();
+                member.setMemberId(resultSet.getInt("Id"));
+                member.setFirstName(resultSet.getString("FirstName"));
+                member.setLastName(resultSet.getString("LastName"));
+                member.setPhoneNumber(resultSet.getLong("PhoneNumber"));
+                member.setEmail(resultSet.getString("EmailAddress"));
+                member.setType(Type.valueOf(resultSet.getString("Type")));
+                member.setAddress(resultSet.getString("Address"));
+                member.setStatus(Status.valueOf(resultSet.getString("Status")));
+                member.setPassword(resultSet.getString("Password"));
+                memberSet.add(member);
             }else{
                 break;
             }
@@ -78,7 +77,7 @@ public class MemberDao {
         resultSet.close();
         preparedStatement.close();
         connection.close();
-        return memberModelSet;
+        return memberSet;
     }
 
     public void deleteMember(int memberId) throws NamingException,SQLException{
@@ -93,16 +92,16 @@ public class MemberDao {
         try { connection.close(); } catch (Exception e) { /* ignored */ }
     }
 
-    public void editMember(MemberModel memberModel) throws NamingException,SQLException{
+    public void editMember(Member member) throws NamingException,SQLException{
         Connection connection = JNDIHelper.getJNDIConnection();
         String sql ="update member SET FirstName=? , LastName=? , PhoneNumber=?  , Address=? " +
                 "where Id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,memberModel.getFirstName());
-        preparedStatement.setString(2,memberModel.getLastName());
-        preparedStatement.setLong(3,memberModel.getPhoneNumber());
-        preparedStatement.setString(4,memberModel.getAddress());
-        preparedStatement.setInt(5,memberModel.getMemberId());
+        preparedStatement.setString(1, member.getFirstName());
+        preparedStatement.setString(2, member.getLastName());
+        preparedStatement.setLong(3, member.getPhoneNumber());
+        preparedStatement.setString(4, member.getAddress());
+        preparedStatement.setInt(5, member.getMemberId());
         preparedStatement.executeUpdate();
 
         preparedStatement.close();
@@ -121,8 +120,8 @@ public class MemberDao {
         connection.close();
     }
 
-    public Set<MemberModel> getAllMembers() throws NamingException,SQLException{
-        Set<MemberModel> memberModelSet = new HashSet<>();
+    public Set<Member> getAllMembers() throws NamingException,SQLException{
+        Set<Member> memberSet = new HashSet<>();
         Connection connection = JNDIHelper.getJNDIConnection();
         String sql = "select * from member where status=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -131,25 +130,25 @@ public class MemberDao {
         while(true){
             boolean contains = resultSet.next();
             if(contains){
-                MemberModel memberModel = new MemberModel();
-                memberModel.setMemberId(resultSet.getInt("Id"));
-                memberModel.setFirstName(resultSet.getString("FirstName"));
-                memberModel.setLastName(resultSet.getString("LastName"));
-                memberModel.setPhoneNumber(resultSet.getLong("PhoneNumber"));
-                memberModel.setEmail(resultSet.getString("EmailAddress"));
-                memberModel.setType(Type.valueOf(resultSet.getString("Type")));
-                memberModel.setAddress(resultSet.getString("Address"));
-                memberModel.setStatus(Status.ACTIVE);
-                memberModelSet.add(memberModel);
+                Member member = new Member();
+                member.setMemberId(resultSet.getInt("Id"));
+                member.setFirstName(resultSet.getString("FirstName"));
+                member.setLastName(resultSet.getString("LastName"));
+                member.setPhoneNumber(resultSet.getLong("PhoneNumber"));
+                member.setEmail(resultSet.getString("EmailAddress"));
+                member.setType(Type.valueOf(resultSet.getString("Type")));
+                member.setAddress(resultSet.getString("Address"));
+                member.setStatus(Status.ACTIVE);
+                memberSet.add(member);
             }else{
                 break;
             }
         }
-        return memberModelSet;
+        return memberSet;
     }
 
-    public Set<MemberModel> searchMember(String email) throws NamingException,SQLException{
-        Set<MemberModel> memberModelSet = new HashSet<>();
+    public Set<Member> searchMember(String email) throws NamingException,SQLException{
+        Set<Member> memberSet = new HashSet<>();
         Connection connection = JNDIHelper.getJNDIConnection();
         String sql = "select * from member where EmailAddress like ? and status=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -159,20 +158,20 @@ public class MemberDao {
         while(true){
             boolean contains = resultSet.next();
             if(contains){
-                MemberModel memberModel = new MemberModel();
-                memberModel.setMemberId(resultSet.getInt("Id"));
-                memberModel.setFirstName(resultSet.getString("FirstName"));
-                memberModel.setLastName(resultSet.getString("LastName"));
-                memberModel.setPhoneNumber(resultSet.getLong("PhoneNumber"));
-                memberModel.setEmail(resultSet.getString("EmailAddress"));
-                memberModel.setType(Type.valueOf(resultSet.getString("Type")));
-                memberModel.setAddress(resultSet.getString("Address"));
-                memberModel.setStatus(Status.ACTIVE);
-                memberModelSet.add(memberModel);
+                Member member = new Member();
+                member.setMemberId(resultSet.getInt("Id"));
+                member.setFirstName(resultSet.getString("FirstName"));
+                member.setLastName(resultSet.getString("LastName"));
+                member.setPhoneNumber(resultSet.getLong("PhoneNumber"));
+                member.setEmail(resultSet.getString("EmailAddress"));
+                member.setType(Type.valueOf(resultSet.getString("Type")));
+                member.setAddress(resultSet.getString("Address"));
+                member.setStatus(Status.ACTIVE);
+                memberSet.add(member);
             }else{
                 break;
             }
         }
-        return memberModelSet;
+        return memberSet;
     }
 }

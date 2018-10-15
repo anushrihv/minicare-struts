@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
+<%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+<%@ taglib prefix="bean" uri="http://struts.apache.org/tags-bean" %>
 
 <style>
 .error{
@@ -28,7 +30,11 @@ input[type=submit] {
         <br><br><br><br>
         <div align="center">
         <html:form action="/visitor/login" method="POST">
-            <p style="color:green"> ${Message} </p>
+            <logic:messagesPresent message="true">
+                    <html:messages id="Message" message="true">
+                       <h4 style="color:green"><bean:write name="Message"/><h4>
+                    </html:messages>
+            </logic:messagesPresent>
             <h2>Login here</h2>
             <table>
                 <tr>

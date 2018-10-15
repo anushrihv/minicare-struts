@@ -1,10 +1,8 @@
 package com.minicare.dao;
 
-import com.minicare.dto.JobFormBean;
-import com.minicare.model.JobModel;
-import com.minicare.model.MemberModel;
+import com.minicare.model.Job;
+import com.minicare.model.Member;
 import com.minicare.model.Status;
-import org.apache.commons.beanutils.converters.SqlDateConverter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,27 +27,27 @@ public class JobDao {
         return jobDao;
     }
 
-    public void storeJob(JobModel jobModel, MemberModel memberModel) throws ClassNotFoundException, SQLException {
+    public void storeJob(Job job, Member member) throws ClassNotFoundException, SQLException {
         Connection connection = JDBCHelper.getConnection();
 
-        int id = memberModel.getMemberId();
+        int id = member.getMemberId();
 
         String sql = "insert into job(Title,PostedBy,StartDateTime,EndDateTime,PayPerHour) values(?,?,?,?,?)";
         preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,jobModel.getJobTitle());
+        preparedStatement.setString(1, job.getJobTitle());
         preparedStatement.setInt(2,id);
-        preparedStatement.setTimestamp(3,jobModel.getStartDateTime());
-        preparedStatement.setTimestamp(4,jobModel.getEndDateTime());
-        preparedStatement.setDouble(5,jobModel.getPayPerHour());
+        preparedStatement.setTimestamp(3, job.getStartDateTime());
+        preparedStatement.setTimestamp(4, job.getEndDateTime());
+        preparedStatement.setDouble(5, job.getPayPerHour());
         preparedStatement.executeUpdate();
         connection.close();
     }
 
-    public List<JobModel> getJobsById(MemberModel memberModel) throws ClassNotFoundException,SQLException{
+    public List<Job> getJobsById(Member member) throws ClassNotFoundException,SQLException{
         Connection connection = JDBCHelper.getConnection();
-        List<JobModel> jobModelList = new ArrayList<JobModel>();
+        List<Job> jobList = new ArrayList<Job>();
 
-        int id = memberModel.getMemberId();
+        int id = member.getMemberId();
 
         String sql = "select * from job where Status=? and PostedBy=?";
         preparedStatement = connection.prepareStatement(sql);
@@ -59,25 +57,25 @@ public class JobDao {
         while (true){
            boolean contains = resultSet.next();
            if(contains){
-               JobModel jobModel = new JobModel();
-               jobModel.setId(resultSet.getInt("Id"));
-               jobModel.setJobTitle(resultSet.getString("Title"));
-               jobModel.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
-               jobModel.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
-               jobModel.setPayPerHour(resultSet.getInt("PayPerHour"));
-               jobModel.setStatus(Status.valueOf(resultSet.getString("Status")));
-               jobModelList.add(jobModel);
+               Job job = new Job();
+               job.setId(resultSet.getInt("Id"));
+               job.setJobTitle(resultSet.getString("Title"));
+               job.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
+               job.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
+               job.setPayPerHour(resultSet.getInt("PayPerHour"));
+               job.setStatus(Status.valueOf(resultSet.getString("Status")));
+               jobList.add(job);
            }else{
                break;
            }
         }
         connection.close();
-        return jobModelList;
+        return jobList;
     }
 
-    public List<JobModel> getJobs() throws ClassNotFoundException,SQLException{
+    public List<Job> getJobs() throws ClassNotFoundException,SQLException{
         Connection connection = JDBCHelper.getConnection();
-        List<JobModel> jobModelList = new ArrayList<JobModel>();
+        List<Job> jobList = new ArrayList<Job>();
 
         String sql = "select * from job where Status=?";
         preparedStatement = connection.prepareStatement(sql);
@@ -86,23 +84,23 @@ public class JobDao {
         while(true){
             boolean contains = resultSet.next();
             if(contains){
-                JobModel jobModel = new JobModel();
-                jobModel.setId(resultSet.getInt("Id"));
-                jobModel.setJobTitle(resultSet.getString("Title"));
-                jobModel.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
-                jobModel.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
-                jobModel.setPayPerHour(resultSet.getInt("PayPerHour"));
-                jobModel.setStatus(Status.valueOf(resultSet.getString("Status")));
-                jobModelList.add(jobModel);
+                Job job = new Job();
+                job.setId(resultSet.getInt("Id"));
+                job.setJobTitle(resultSet.getString("Title"));
+                job.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
+                job.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
+                job.setPayPerHour(resultSet.getInt("PayPerHour"));
+                job.setStatus(Status.valueOf(resultSet.getString("Status")));
+                jobList.add(job);
             }else{
                 break;
             }
         }
         connection.close();
-        return jobModelList;
+        return jobList;
     }
 
-    public JobModel getJobByJobId(int jobId) throws ClassNotFoundException,SQLException{
+    public Job getJobByJobId(int jobId) throws ClassNotFoundException,SQLException{
         Connection connection = JDBCHelper.getConnection();
         String sql ="select * from job where Id=? and status=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -110,15 +108,15 @@ public class JobDao {
         preparedStatement.setString(2,Status.ACTIVE.name());
         ResultSet resultSet = preparedStatement.executeQuery();
         if(resultSet.next()){
-            JobModel jobModel = new JobModel();
-            jobModel.setId(resultSet.getInt("Id"));
-            jobModel.setJobTitle(resultSet.getString("Title"));
-            jobModel.setPostedBy(resultSet.getInt("PostedBy"));
-            jobModel.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
-            jobModel.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
-            jobModel.setPayPerHour(resultSet.getDouble("PayPerHour"));
-            jobModel.setStatus(Status.valueOf(resultSet.getString("Status")));
-            return jobModel;
+            Job job = new Job();
+            job.setId(resultSet.getInt("Id"));
+            job.setJobTitle(resultSet.getString("Title"));
+            job.setPostedBy(resultSet.getInt("PostedBy"));
+            job.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
+            job.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
+            job.setPayPerHour(resultSet.getDouble("PayPerHour"));
+            job.setStatus(Status.valueOf(resultSet.getString("Status")));
+            return job;
         }
         return null;
     }
@@ -133,15 +131,15 @@ public class JobDao {
         connection.close();
     }
 
-    public void updateJob(JobModel jobModel) throws ClassNotFoundException, SQLException {
+    public void updateJob(Job job) throws ClassNotFoundException, SQLException {
         Connection connection = JDBCHelper.getConnection();
         String sql ="update job SET Title=? , StartDateTime=? , EndDateTime=? , PayPerHour=? where Id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,jobModel.getJobTitle());
-        preparedStatement.setTimestamp(2,jobModel.getStartDateTime());
-        preparedStatement.setTimestamp(3,jobModel.getEndDateTime());
-        preparedStatement.setDouble(4,Double.valueOf(jobModel.getPayPerHour()));
-        preparedStatement.setInt(5,jobModel.getId());
+        preparedStatement.setString(1, job.getJobTitle());
+        preparedStatement.setTimestamp(2, job.getStartDateTime());
+        preparedStatement.setTimestamp(3, job.getEndDateTime());
+        preparedStatement.setDouble(4,Double.valueOf(job.getPayPerHour()));
+        preparedStatement.setInt(5, job.getId());
         preparedStatement.executeUpdate();
         connection.close();
     }

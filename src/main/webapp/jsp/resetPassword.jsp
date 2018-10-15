@@ -1,4 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
 
 <style>
  input[type=submit] {
@@ -14,38 +16,41 @@
 h1{
 text-align : center;
 }
+
+.error{ color:red; }
 </style>
 
 <html>
 <body>
         <c:if test="${CurrentUser.type=='SITTER'}">
-            <div align="right"><form action="/minicare-1.0-SNAPSHOT/jsp/sitter_homepage.jsp" > <input type="submit" value="HOME" > </form></div>
+            <div align="right"><html:form action="/sitterhomepage" > <html:submit value="HOME" /> </html:form></div>
         </c:if>
         <c:if test="${CurrentUser.type=='SEEKER'}">
-           <div align="right"><form action="/minicare-1.0-SNAPSHOT/jsp/seeker_homepage.jsp" > <input type="submit" value="HOME" > </form></div>
+           <div align="right"><html:form action="/seekerhomepage" > <html:submit value="HOME" /> </html:form></div>
         </c:if>
     <div align="center">
-        <form action="/minicare-1.0-SNAPSHOT/member/resetpassword.do" method="post">
+        <html:form action="/member/resetpassword.do" method="post">
             <table>
                 <tr>
                     <td>Enter old password</td>
-                    <td> <input type="password" name="oldpassword" value="${OldPassword}" required> </td>
-                    <td class="error"> ${OldPasswordError} </td>
+                    <td> <html:password property="oldpassword" /> </td>
+                    <td class="error"> <html:errors property="OldPasswordError" /> </td>
                 </tr>
                 <tr>
                     <td>Enter new password</td>
-                    <td> <input type="password" name="newpassword" value="${NewPassword}" required> </td>
+                    <td> <html:password property="newpassword" /> </td>
+                    <td class="error"> <html:errors property="NewPasswordError" /> </td>
                 </tr>
                 <tr>
                     <td>Re-enter new password</td>
-                    <td> <input type="password" name="newpassword2" value="${NewPassword2}" required> </td>
-                    <td class="error"> ${NewPasswordError} </td>
+                    <td> <html:password property="newpassword2" /> </td>
+                    <td class="error"> <html:errors property="NewPassword2Error" /> </td>
                 </tr>
                 <tr>
-                <td><input type="submit" value="Reset Password"></td>
+                <td><html:submit value="Reset Password" /></td>
                 </tr>
             </table>
-        </form>
+        </html:form>
     </div>
    </body>
 </html>

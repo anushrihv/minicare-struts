@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
 <%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+<%@ taglib prefix="bean" uri="http://struts.apache.org/tags-bean" %>
 
 <style>
  input[type=submit] {
@@ -26,6 +27,13 @@ float : right ;
 <html>
     <body>
         <h1>Home Page</h1>
+        <div align="center" >
+        <logic:messagesPresent message="true">
+                <html:messages id="HomePageMessage" message="true">
+                   <h4 style="color:green"><bean:write name="HomePageMessage"/><h4>
+                </html:messages>
+        </logic:messagesPresent>
+        </div>
 
         <form action="/minicare-1.0-SNAPSHOT/member/logout.do" class="right"><input type="submit" value="LOG OUT"></form>
         <form action="/minicare-1.0-SNAPSHOT/seeker/postjobform.do "><input type="submit" value="POST JOB"></form>

@@ -2,8 +2,8 @@ package com.minicare.controller.sitter;
 
 import com.minicare.dto.PasswordHashHelper;
 import com.minicare.dto.SitterForm;
-import com.minicare.model.MemberModel;
-import com.minicare.model.SitterModel;
+import com.minicare.model.Member;
+import com.minicare.model.Sitter;
 import com.minicare.model.Type;
 import com.minicare.service.SitterService;
 
@@ -41,13 +41,11 @@ public class SitterUtil {
         return sitterForm;
     }
 
-    public SitterModel populateSitterModel(SitterForm sitterForm) {
-        //SitterForm sitterForm = populateSitterFormBean(req);
-        //SitterForm sitterForm = (SitterForm) req.getAttribute("SitterForm");
-        SitterModel sitterModel = new SitterModel();
+    public Sitter populateSitterModel(SitterForm sitterForm) {
+        Sitter sitterModel = new Sitter();
         long phoneNumber = Long.parseLong(sitterForm.getPhonenumber());
         int yearsOfExperience = Integer.parseInt(sitterForm.getYearsOfExperience());
-        int expectedPay = Integer.parseInt(sitterForm.getExpectedPay());
+        double expectedPay = Double.parseDouble(sitterForm.getExpectedPay());
         String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword());
 
         sitterModel.setFirstName(sitterForm.getFirstname());
@@ -60,13 +58,12 @@ public class SitterUtil {
         sitterModel.setYearsOfExperience(yearsOfExperience);
         sitterModel.setExpectedPay(expectedPay);
 
-        //req.setAttribute("SitterModel",sitterModel);
         return sitterModel;
 
     }
 
-    public SitterModel populateSitterModelFromRequest(HttpServletRequest request){
-        SitterModel sitterModel = new SitterModel();
+    public Sitter populateSitterModelFromRequest(HttpServletRequest request){
+        Sitter sitterModel = new Sitter();
         sitterModel.setMemberId(Integer.parseInt(request.getParameter("memberId")));
         sitterModel.setFirstName(request.getParameter("firstname"));
         sitterModel.setLastName(request.getParameter("lastname"));
@@ -80,22 +77,21 @@ public class SitterUtil {
         return sitterModel;
     }
 
-    public void populateSitterFormBeanBySitterModel(MemberModel memberModel, HttpServletRequest request) throws ClassNotFoundException, SQLException {
+    public void populateSitterFormBeanBySitterModel(Member member, SitterForm sitterForm) throws ClassNotFoundException, SQLException {
         SitterService sitterService = SitterService.getInstance();
-        SitterForm sitterForm = new SitterForm();
 
-        sitterForm.setFirstname(memberModel.getFirstName());
-        sitterForm.setLastname(memberModel.getLastName());
-        sitterForm.setPhonenumber(String.valueOf(memberModel.getPhoneNumber()));
-        sitterForm.setEmail(memberModel.getEmail());
-        sitterForm.setAddress(memberModel.getAddress());
-        sitterForm.setPassword(memberModel.getPassword());
+        sitterForm.setMemberId(String.valueOf(member.getMemberId()));
+        sitterForm.setType(member.getType().name());
+        sitterForm.setFirstname(member.getFirstName());
+        sitterForm.setLastname(member.getLastName());
+        sitterForm.setPhonenumber(String.valueOf(member.getPhoneNumber()));
+        sitterForm.setEmail(member.getEmail());
+        sitterForm.setAddress(member.getAddress());
+        sitterForm.setPassword(member.getPassword());
 
-        SitterModel sitterModel = sitterService.getSitter(memberModel.getMemberId());
+        Sitter sitterModel = sitterService.getSitter(member.getMemberId());
 
         sitterForm.setYearsOfExperience(String.valueOf(sitterModel.getYearsOfExperience()));
         sitterForm.setExpectedPay(String.valueOf(sitterModel.getExpectedPay()));
-
-        request.setAttribute("SitterForm", sitterForm);
     }
 }

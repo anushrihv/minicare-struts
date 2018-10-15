@@ -3,9 +3,10 @@ package com.minicare.service;
 import com.minicare.controller.seeker.JobUtil;
 import com.minicare.dao.JobApplicationDao;
 import com.minicare.dao.JobDao;
-import com.minicare.dto.JobFormBean;
-import com.minicare.model.JobModel;
-import com.minicare.model.MemberModel;
+import com.minicare.dto.JobForm;
+import com.minicare.model.Job;
+import com.minicare.model.Member;
+
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -28,56 +29,55 @@ public class JobService {
         return jobService;
     }
 
-    public void storeJob(HttpServletRequest request) throws ClassNotFoundException, SQLException {
+    public void storeJob(HttpServletRequest request,JobForm jobForm) throws ClassNotFoundException, SQLException {
         JobUtil jobUtil = JobUtil.getInstance();
-        MemberModel memberModel = (MemberModel) request.getSession(false).getAttribute("CurrentUser");
-        JobModel jobModel = jobUtil.populateJobModelFromRequest(request);
-        //JobModel jobModel = (JobModel) request.getAttribute("JobModel");
+        Member member = (Member) request.getSession(false).getAttribute("CurrentUser");
+        Job job = jobUtil.populateJobModel(jobForm);
         JobDao jobDao = JobDao.getInstance();
-        jobDao.storeJob(jobModel,memberModel);
+        jobDao.storeJob(job, member);
     }
 
-    public List<JobModel> closeJob(int jobId,MemberModel memberModel) throws SQLException,ClassNotFoundException,NamingException {
+    public List<Job> closeJob(int jobId, Member member) throws SQLException,ClassNotFoundException,NamingException {
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
         JobDao jobDao = JobDao.getInstance();
 
         jobApplicationDao.closeJobApplicationByJobId(jobId);
         jobDao.closeJob(jobId);
-        List<JobModel> jobModelList = jobDao.getJobsById(memberModel);
-        return jobModelList;
+        List<Job> jobList = jobDao.getJobsById(member);
+        return jobList;
     }
 
-    public JobModel getJobByJobId(int jobId) throws SQLException,ClassNotFoundException{
+    public Job getJobByJobId(int jobId) throws SQLException,ClassNotFoundException{
         JobDao jobDao = JobDao.getInstance();
-        JobModel jobModel = jobDao.getJobByJobId(jobId);
-        return jobModel;
+        Job job = jobDao.getJobByJobId(jobId);
+        return job;
     }
 
-    public void updateJob(JobFormBean jobFormBean) throws ClassNotFoundException, SQLException {
-        JobModel jobModel = new JobModel();
+    public void updateJob(JobForm jobForm) throws ClassNotFoundException, SQLException {
+        Job job = new Job();
         JobDao jobDao = JobDao.getInstance();
 
-        jobModel.setId(Integer.parseInt(jobFormBean.getId()));
-        jobModel.setJobTitle(jobFormBean.getJobTitle());
-        jobModel.setStartDateTime(Timestamp.valueOf(jobFormBean.getStartDateTime()));
-        jobModel.setEndDateTime(Timestamp.valueOf(jobFormBean.getEndDateTime()));
-        jobModel.setPayPerHour(Double.parseDouble(jobFormBean.getPayPerHour()));
-        jobDao.updateJob(jobModel);
+        job.setId(Integer.parseInt(jobForm.getId()));
+        job.setJobTitle(jobForm.getJobTitle());
+        job.setStartDateTime(Timestamp.valueOf(jobForm.getStartDateTime()));
+        job.setEndDateTime(Timestamp.valueOf(jobForm.getEndDateTime()));
+        job.setPayPerHour(Double.parseDouble(jobForm.getPayPerHour()));
+        jobDao.updateJob(job);
     }
 
-    public List<JobModel> getJobs(MemberModel memberModel) throws ClassNotFoundException,SQLException, NamingException {
+    public List<Job> getJobs(Member member) throws ClassNotFoundException,SQLException, NamingException {
         JobDao jobDao = JobDao.getInstance();
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
-        List<JobModel> jobModelList = jobDao.getJobs();
-        Iterator<JobModel> iterator = jobModelList.iterator();
+        List<Job> jobList = jobDao.getJobs();
+        Iterator<Job> iterator = jobList.iterator();
         while(iterator.hasNext()){
-            JobModel jobModel = iterator.next();
-            int jobId = jobModel.getId();
-            if(jobApplicationDao.getJobApplication(jobId,memberModel.getMemberId())!=null){
+            Job job = iterator.next();
+            int jobId = job.getId();
+            if(jobApplicationDao.getJobApplication(jobId, member.getMemberId())!=null){
                 iterator.remove();
             }
         }
-        return jobModelList;
+        return jobList;
     }
 
     public void deleteJobsBySeeker(int seekerId) throws ClassNotFoundException,SQLException{
@@ -85,9 +85,9 @@ public class JobService {
         jobDao.closeJobByMemberId(seekerId);
     }
 
-    public List<JobModel> getJobsById(MemberModel memberModel) throws ClassNotFoundException,SQLException{
+    public List<Job> getJobsById(Member member) throws ClassNotFoundException,SQLException{
         JobDao jobDao = JobDao.getInstance();
 
-        return jobDao.getJobsById(memberModel);
+        return jobDao.getJobsById(member);
     }
 }

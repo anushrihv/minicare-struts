@@ -9,7 +9,18 @@
         <form-bean name="MemberForm" type="com.minicare.dto.MemberForm" />
         <form-bean name="SitterForm" type="com.minicare.dto.SitterForm" />
         <form-bean name="SeekerForm" type="com.minicare.dto.SeekerForm" />
+        <form-bean name="ResetPasswordForm" type="com.minicare.dto.ResetPasswordForm" />
+        <form-bean name="SearchForm" type="com.minicare.dto.SearchForm" />
+        <form-bean name="ApplyJobForm" type="com.minicare.dto.ApplyJobForm" />
+        <form-bean name="JobForm" type="com.minicare.dto.JobForm" />
+        <form-bean name="DeleteJobApplicationForm" type="com.minicare.dto.DeleteJobApplicationForm" />
     </form-beans>
+
+    <global-forwards>
+        <forward name="SitterHomePage" path="/sitter/homepage.do" redirect="true"/>
+        <forward name="SeekerHomePage" path="/seeker/homepage.do" redirect="true" />
+        <forward name="WelcomePage" path="/jsp/welcome.jsp" redirect="false" />
+    </global-forwards>
 
     <action-mappings>
 
@@ -73,9 +84,123 @@
             <forward name="/seekerhomepage" path="/jsp/seeker_homepage.jsp" redirect="false" />
         </action>
 
+        <action path="/sitter/editaccountform" type="com.minicare.controller.sitter.EditAccountFormAction"
+                validate="false" name="SitterForm" scope="request" >
+            <forward name="/editAccountForm" path="/jsp/editSitterAccount.jsp" />
+        </action>
+
+        <action path="/sitter/editaccount" type="com.minicare.controller.sitter.EditAccountAction"
+                validate="true" name="SitterForm" scope="request" input="/jsp/editSitterAccount.jsp" >
+            <forward name="/sitterhomepage" path="/jsp/sitter_homepage.jsp" redirect="false" />
+        </action>
+
+        <!-- logout -->
+
+        <action path="/member/logout" type="com.minicare.controller.member.Logout"
+                validate="false" name="MemberForm" >
+            <forward name="/welcomepage" path="/jsp/welcome.jsp" redirect="false" />
+        </action>
+
+        <!-- reset password -->
+
+        <action path="/member/resetpasswordform" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/resetPassword.jsp" />
+
+        <action path="/member/resetpassword" type="com.minicare.controller.member.ResetPassword"
+                name="ResetPasswordForm" validate="true" input="/jsp/resetPassword.jsp" scope="request">
+            <forward name="/resetpasswordform" path="/jsp/resetPassword.jsp" redirect="false" />
+            <forward name="SitterHomePage" path="/sitter/homepage.do" redirect="false"/>
+            <forward name="SeekerHomePage" path="/seeker/homepage.do" redirect="false" />
+        </action>
+
+        <!-- search member -->
+
+        <action path="/member/searchform" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/searchMember.jsp" />
+
+        <action path="/member/search" type="com.minicare.controller.member.SearchMember"
+                name="SearchForm" validate="true" input="/jsp/searchMember.jsp" scope="request" >
+            <forward name="/searchresult" path="/jsp/searchResult.jsp" />
+        </action>
+
+        <!-- show job -->
+
+        <action path="/sitter/showjob" type="com.minicare.controller.sitter.ShowJob"
+                validate="false" >
+            <forward name="showjobs" path="/jsp/showJobs.jsp" redirect="false" />
+        </action>
+
+        <!-- apply job -->
+
+        <action path="/sitter/applyjobform" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/applyJob.jsp" scope="request" validate="false" name="ApplyJobForm"/>
+
+        <action path="/sitter/applyjob" type="com.minicare.controller.sitter.ApplyJobAction"
+                name="ApplyJobForm" validate="true" input="/jsp/applyJob.jsp" scope="request">
+            <forward name="listjobapplications" path="/sitter/listjobapplications.do" redirect="true"/>
+        </action>
+
+        <action path="/sitter/listjobapplications" type="com.minicare.controller.sitter.ListJobApplication"
+                validate="false" >
+            <forward name="listmyjobapplications" path="/jsp/listMyJobApplications.jsp" redirect="false" />
+        </action>
+
+        <!-- delete job application -->
+
+        <action path="/sitter/deletejobapplication" type="com.minicare.controller.sitter.DeleteJobApplication"
+                name="DeleteJobApplicationForm" validate="false" scope="request" >
+            <forward name="listmyjobapplications" path="/jsp/listMyJobApplications.jsp" redirect="false" />
+        </action>
+
+        <!-- close account -->
+
+        <action path="/sitter/closeaccount" type="com.minicare.controller.sitter.CloseAccountAction"
+                validate="false" />
+
+        <action path="/seeker/closeaccount" type="com.minicare.controller.seeker.CloseAccountAction"
+                validate="false" />
+
+        <!-- list jobs posted by seeker -->
+
+        <action path="/seeker/listjob" type="com.minicare.controller.seeker.ListJob"
+                validate="false" >
+            <forward name="listjobs" path="/jsp/listJobs.jsp" />
+        </action>
+
+        <!-- edit job -->
+        <action path="/seeker/editjob" type="com.minicare.controller.seeker.EditJobAction"
+                name="JobForm" validate="false" scope="request">
+            <forward name="editjob" path="/jsp/editJob.jsp" />
+        </action>
+
+        <action path="/seeker/updatejob" type="com.minicare.controller.seeker.UpdateJob"
+                name="JobForm" validate="true" input="/jsp/editJob.jsp" scope="request">
+            <forward name="listjobs" path="/jsp/listJobs.jsp" />
+        </action>
+
+        <!-- list applications for job posted by seeker -->
+        <action path="/seeker/listapplications" type="com.minicare.controller.seeker.ListApplications"
+                name="JobForm" validate="false" scope="request">
+            <forward name="showjobapplications" path="/jsp/seekerJobApplications.jsp" redirect="false" />
+        </action>
+
+        <!-- close job -->
+        <action path="/seeker/closejob" type="com.minicare.controller.seeker.CloseJob"
+                name="JobForm" validate="false" scope="request">
+            <forward name="listjobs" path="/jsp/listJobs.jsp" redirect="false" />
+        </action>
+
+        <!-- post job -->
+        <action path="/seeker/postjobform" type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/postJob.jsp" />
+
+        <action path="/seeker/postjob" type="com.minicare.controller.seeker.PostJobAction"
+                name="JobForm" validate="true" input="/jsp/postJob.jsp" scope="request" >
+            <forward name="listjobs" path="/jsp/listJobs.jsp" redirect="false" />
+        </action>
 
 
     </action-mappings>
 
-    <message-resources parameter="ErrorResources" />
+    <message-resources parameter="MessageResources" />
 </struts-config>

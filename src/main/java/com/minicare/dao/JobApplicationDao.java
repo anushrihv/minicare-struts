@@ -1,7 +1,7 @@
 package com.minicare.dao;
 
 import com.minicare.dto.JobApplicationDTO;
-import com.minicare.model.JobApplicationModel;
+import com.minicare.model.JobApplication;
 import com.minicare.model.Status;
 import javax.naming.NamingException;
 import java.sql.Connection;
@@ -26,13 +26,13 @@ public class JobApplicationDao {
         return jobApplicationDao;
     }
 
-    public void storeJobApplication(JobApplicationModel jobApplicationModel) throws SQLException, NamingException {
+    public void storeJobApplication(JobApplication jobApplication) throws SQLException, NamingException {
         Connection connection = JNDIHelper.getJNDIConnection();
         String sql = "insert into jobapplication(JobId,MemberId,ExpectedPay) values (?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1,jobApplicationModel.getJobId());
-        preparedStatement.setInt(2,jobApplicationModel.getMemberId());
-        preparedStatement.setDouble(3,jobApplicationModel.getExpectedPay());
+        preparedStatement.setInt(1, jobApplication.getJobId());
+        preparedStatement.setInt(2, jobApplication.getMemberId());
+        preparedStatement.setDouble(3, jobApplication.getExpectedPay());
         preparedStatement.executeUpdate();
 
         preparedStatement.close();

@@ -2,8 +2,8 @@ package com.minicare.controller.seeker;
 
 import com.minicare.dto.PasswordHashHelper;
 import com.minicare.dto.SeekerForm;
-import com.minicare.model.MemberModel;
-import com.minicare.model.SeekerModel;
+import com.minicare.model.Member;
+import com.minicare.model.Seeker;
 import com.minicare.model.Type;
 import com.minicare.service.SeekerService;
 
@@ -43,10 +43,10 @@ public class SeekerUtil {
         return seekerForm;
     }
 
-    public SeekerModel populateSeekerModel(SeekerForm seekerForm) {
+    public Seeker populateSeekerModel(SeekerForm seekerForm) {
         //SeekerForm seekerForm = populateSeekerFormBean(req);
         //SeekerForm seekerForm = (SeekerForm) req.getAttribute("SeekerForm");
-        SeekerModel seekerModel = new SeekerModel();
+        Seeker seekerModel = new Seeker();
         int numberOfChildren;
         long phoneNumber = Long.parseLong(seekerForm.getPhonenumber());
 
@@ -67,12 +67,12 @@ public class SeekerUtil {
         seekerModel.setNumberOfChildren(numberOfChildren);
         seekerModel.setSpouseName(seekerForm.getSpouseName());
 
-        //req.setAttribute("SeekerModel",seekerModel);
+        //req.setAttribute("Seeker",seekerModel);
         return seekerModel;
     }
 
-    public SeekerModel populateSeekerModelFromRequest(HttpServletRequest request){
-        SeekerModel seekerModel = new SeekerModel();
+    public Seeker populateSeekerModelFromRequest(HttpServletRequest request){
+        Seeker seekerModel = new Seeker();
         seekerModel.setMemberId(Integer.parseInt(request.getParameter("memberId")));
         seekerModel.setFirstName(request.getParameter("firstname"));
         seekerModel.setLastName(request.getParameter("lastname"));
@@ -86,19 +86,19 @@ public class SeekerUtil {
         return seekerModel;
     }
 
-    public void populateSeekerFormBeanBySeekerModel(MemberModel memberModel , SeekerForm seekerForm) throws ClassNotFoundException, SQLException {
+    public void populateSeekerFormBeanBySeekerModel(Member member, SeekerForm seekerForm) throws ClassNotFoundException, SQLException {
         SeekerService seekerService = SeekerService.getInstance();
 
-        seekerForm.setMemberId(String.valueOf(memberModel.getMemberId()));
-        seekerForm.setFirstname(memberModel.getFirstName());
-        seekerForm.setLastname(memberModel.getLastName());
-        seekerForm.setPhonenumber(String.valueOf(memberModel.getPhoneNumber()));
-        seekerForm.setEmail(memberModel.getEmail());
-        seekerForm.setAddress(memberModel.getAddress());
-        seekerForm.setPassword(memberModel.getPassword());
+        seekerForm.setMemberId(String.valueOf(member.getMemberId()));
+        seekerForm.setFirstname(member.getFirstName());
+        seekerForm.setLastname(member.getLastName());
+        seekerForm.setPhonenumber(String.valueOf(member.getPhoneNumber()));
+        seekerForm.setEmail(member.getEmail());
+        seekerForm.setAddress(member.getAddress());
+        seekerForm.setPassword(member.getPassword());
         seekerForm.setType(Type.SEEKER.name());
 
-        SeekerModel seekerModel = seekerService.getSeeker(memberModel.getMemberId());
+        Seeker seekerModel = seekerService.getSeeker(member.getMemberId());
 
         seekerForm.setSpouseName(seekerModel.getSpouseName());
         seekerForm.setNumberOfChildren(String.valueOf(seekerModel.getNumberOfChildren()));

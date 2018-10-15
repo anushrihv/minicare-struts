@@ -1,10 +1,8 @@
 package com.minicare.controller.visitor;
 
 import com.minicare.dao.MemberDao;
-import com.minicare.dto.LoginForm;
-import com.minicare.model.MemberModel;
+import com.minicare.model.Member;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.Iterator;
@@ -29,10 +27,10 @@ public class VisitorUtil {
     public void populateModelFromDb(String email, HttpSession session) throws SQLException,ClassNotFoundException{
         MemberDao memberDao = MemberDao.getInstance();
 
-        Set<MemberModel> memberModelSet = memberDao.getMember(email);
-        Iterator<MemberModel> iterator = memberModelSet.iterator();
-        MemberModel memberModel = iterator.next();
+        Set<Member> memberSet = memberDao.getMember(email);
+        Iterator<Member> iterator = memberSet.iterator();
+        Member member = iterator.next();
 
-        session.setAttribute("CurrentUser",memberModel);
+        session.setAttribute("CurrentUser", member);
     }
 }

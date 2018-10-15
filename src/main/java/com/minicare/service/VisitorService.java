@@ -8,9 +8,7 @@ import com.minicare.dao.SeekerDao;
 import com.minicare.dao.SitterDao;
 import com.minicare.dto.*;
 import com.minicare.model.*;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMessage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,12 +20,12 @@ public class VisitorService{
     private static VisitorService visitorService;
     private SeekerForm seekerForm;
     private SitterForm sitterForm;
-    private SitterModel sitterModel;
-    private SeekerModel seekerModel;
+    private Sitter sitterModel;
+    private Seeker seekerModel;
     private SeekerDao seekerDao;
     private SitterDao sitterDao;
     private MemberDao memberDao;
-    private MemberModel memberModel;
+    private Member member;
 
 
     static {
@@ -46,7 +44,7 @@ public class VisitorService{
     public void storeSitterDetails(SitterForm sitterForm,HttpSession session) throws SQLException,ClassNotFoundException{
         VisitorUtil visitorUtil = VisitorUtil.getInstance();
         SitterUtil sitterUtil = SitterUtil.getInstance();
-        SitterModel sitterModel = sitterUtil.populateSitterModel(sitterForm);
+        Sitter sitterModel = sitterUtil.populateSitterModel(sitterForm);
         sitterDao = SitterDao.getInstance();
         sitterDao.insertSitter(sitterModel);
         visitorUtil.populateModelFromDb(sitterModel.getEmail(),session);
@@ -55,7 +53,7 @@ public class VisitorService{
     public void storeSeekerDetails(SeekerForm seekerForm,HttpSession session) throws SQLException,ClassNotFoundException {
         VisitorUtil visitorUtil = VisitorUtil.getInstance();
         SeekerUtil seekerUtil = SeekerUtil.getInstance();
-        SeekerModel seekerModel = seekerUtil.populateSeekerModel(seekerForm);
+        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm);
         seekerDao = SeekerDao.getInstance();
         seekerDao.insertSeeker(seekerModel);
         visitorUtil.populateModelFromDb(seekerModel.getEmail(),session);
@@ -66,22 +64,22 @@ public class VisitorService{
         LoginForm loginForm = (LoginForm) actionForm;
         boolean status=true;
         memberDao = MemberDao.getInstance();
-        Set<MemberModel> memberModelSet = memberDao.getMember(loginForm.getEmail());
-        Iterator<MemberModel> iterator = memberModelSet.iterator();
+        Set<Member> memberSet = memberDao.getMember(loginForm.getEmail());
+        Iterator<Member> iterator = memberSet.iterator();
         if(!iterator.hasNext()){
             status=false;
         }else{
-            MemberModel memberModel = iterator.next();
-            String memberStatus = memberModel.getStatus().name();
+            Member member = iterator.next();
+            String memberStatus = member.getStatus().name();
             if(memberStatus.equals("INACTIVE")){
                 status=false;
             }
-            String dbPassword = memberModel.getPassword();
+            String dbPassword = member.getPassword();
             String userPasswordHash = PasswordHashHelper.get_SHA_256_SecurePassword(req.getParameter("password"));
             if(!userPasswordHash.equals(dbPassword)){
                 status=false;
             }
-            loginForm.setType(memberModel.getType().name());
+            loginForm.setType(member.getType().name());
         }
 
         return status;

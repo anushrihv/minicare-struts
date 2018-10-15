@@ -3,9 +3,10 @@ package com.minicare.service;
 import com.minicare.controller.sitter.SitterUtil;
 import com.minicare.dao.MemberDao;
 import com.minicare.dao.SitterDao;
-import com.minicare.model.SitterModel;
+import com.minicare.dto.SitterForm;
+import com.minicare.model.Sitter;
+
 import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
 
@@ -32,17 +33,17 @@ public class SitterService {
         memberDao.deleteMember(memberId);
     }
 
-    public SitterModel getSitter(int sitterId) throws ClassNotFoundException,SQLException{
+    public Sitter getSitter(int sitterId) throws ClassNotFoundException,SQLException{
         SitterDao sitterDao = SitterDao.getInstance();
         return sitterDao.getSitter(sitterId);
     }
 
-    public SitterModel editSitterAccount(HttpServletRequest request) throws ClassNotFoundException,SQLException, NamingException {
+    public Sitter editSitterAccount(SitterForm sitterForm) throws ClassNotFoundException,SQLException, NamingException {
         SitterUtil sitterUtil = SitterUtil.getInstance();
         SitterDao sitterDao = SitterDao.getInstance();
         MemberDao memberDao = MemberDao.getInstance();
 
-        SitterModel sitterModel = sitterUtil.populateSitterModelFromRequest(request);
+        Sitter sitterModel = sitterUtil.populateSitterModel(sitterForm);
         sitterDao.editSitter(sitterModel);
         memberDao.editMember(sitterModel);
         return sitterModel;
