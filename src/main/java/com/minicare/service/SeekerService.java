@@ -51,11 +51,12 @@ public class SeekerService {
 
 
     public Seeker editSeekerAccount(SeekerForm seekerForm) throws ClassNotFoundException,SQLException, NamingException {
+        boolean isRegister = false;
         SeekerUtil seekerUtil = SeekerUtil.getInstance();
         SeekerDao seekerDao = SeekerDao.getInstance();
         MemberDao memberDao = MemberDao.getInstance();
 
-        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm);
+        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm,isRegister);
         seekerDao.editSeeker(seekerModel);
         memberDao.editMember(seekerModel);
         return seekerModel;

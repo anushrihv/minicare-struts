@@ -25,36 +25,22 @@ public class SitterUtil {
         return sitterUtil;
     }
 
-    public SitterForm populateSitterFormBean(HttpServletRequest req)  {
-
-        SitterForm sitterForm = new SitterForm();
-        sitterForm.setFirstname(req.getParameter("firstname"));
-        sitterForm.setLastname(req.getParameter("lastname"));
-        sitterForm.setPhonenumber(req.getParameter("phonenumber"));
-        sitterForm.setEmail(req.getParameter("email"));
-        sitterForm.setAddress(req.getParameter("address"));
-        sitterForm.setPassword(req.getParameter("password"));
-        sitterForm.setPassword2(req.getParameter("password2"));
-        sitterForm.setYearsOfExperience(req.getParameter("yearsofexperience"));
-        sitterForm.setExpectedPay(req.getParameter("expectedpay"));
-        req.setAttribute("SitterForm", sitterForm);
-        return sitterForm;
-    }
-
-    public Sitter populateSitterModel(SitterForm sitterForm) {
+    public Sitter populateSitterModel(SitterForm sitterForm,boolean isRegister) {
         Sitter sitterModel = new Sitter();
         long phoneNumber = Long.parseLong(sitterForm.getPhonenumber());
         int yearsOfExperience = Integer.parseInt(sitterForm.getYearsOfExperience());
         double expectedPay = Double.parseDouble(sitterForm.getExpectedPay());
-        String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword());
+        //String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword());
 
+        if(!isRegister)
+            sitterModel.setMemberId(Integer.parseInt(sitterForm.getMemberId()));
         sitterModel.setFirstName(sitterForm.getFirstname());
         sitterModel.setLastName(sitterForm.getLastname());
         sitterModel.setPhoneNumber(phoneNumber);
         sitterModel.setEmail(sitterForm.getEmail());
         sitterModel.setType(Type.SITTER);
         sitterModel.setAddress(sitterForm.getAddress());
-        sitterModel.setPassword(passwordHash);
+        sitterModel.setPassword(sitterForm.getPassword());
         sitterModel.setYearsOfExperience(yearsOfExperience);
         sitterModel.setExpectedPay(expectedPay);
 
@@ -62,20 +48,6 @@ public class SitterUtil {
 
     }
 
-    public Sitter populateSitterModelFromRequest(HttpServletRequest request){
-        Sitter sitterModel = new Sitter();
-        sitterModel.setMemberId(Integer.parseInt(request.getParameter("memberId")));
-        sitterModel.setFirstName(request.getParameter("firstname"));
-        sitterModel.setLastName(request.getParameter("lastname"));
-        sitterModel.setPhoneNumber(Long.parseLong(request.getParameter("phonenumber")));
-        sitterModel.setEmail(request.getParameter("email"));
-        sitterModel.setType(Type.SITTER);
-        sitterModel.setAddress(request.getParameter("address"));
-        sitterModel.setYearsOfExperience(Integer.parseInt(request.getParameter("yearsofexperience")));
-        sitterModel.setExpectedPay(Double.parseDouble(request.getParameter("expectedpay")));
-        sitterModel.setPassword(request.getParameter("password"));
-        return sitterModel;
-    }
 
     public void populateSitterFormBeanBySitterModel(Member member, SitterForm sitterForm) throws ClassNotFoundException, SQLException {
         SitterService sitterService = SitterService.getInstance();

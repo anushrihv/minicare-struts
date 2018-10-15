@@ -40,7 +40,6 @@ public class MemberService {
 
     public ActionErrors checkPassword(HttpServletRequest request) {
         ActionErrors actionErrors = new ActionErrors();
-        boolean status=true;
         Member member = (Member) request.getSession().getAttribute("CurrentUser");
         String currentPasswordHash = PasswordHashHelper.get_SHA_256_SecurePassword(request.getParameter("oldpassword"));
         request.setAttribute("OldPassword",request.getParameter("oldpassword"));

@@ -22,22 +22,6 @@ public class JobUtil {
         return jobUtil;
     }
 
-    public JobForm populateJobFormBean(HttpServletRequest request)  {
-        Member member = (Member) request.getSession().getAttribute("CurrentUser");
-        JobForm jobForm = new JobForm();
-        jobForm.setId(request.getParameter("jobid"));
-        jobForm.setJobTitle(request.getParameter("jobtitle"));
-        jobForm.setStartDate(request.getParameter("startdate"));
-        jobForm.setStartTime(request.getParameter("starttime"));
-        jobForm.setEndDate(request.getParameter("enddate"));
-        jobForm.setEndTime(request.getParameter("endtime"));
-        jobForm.setStartDateTime();
-        jobForm.setEndDateTime();
-        jobForm.setPayPerHour(request.getParameter("payperhour"));
-        jobForm.setPostedBy(String.valueOf(member.getMemberId()));
-        request.setAttribute("JobForm", jobForm);
-        return jobForm;
-    }
 
     public Job populateJobModel(JobForm jobForm){
         Job job = new Job();

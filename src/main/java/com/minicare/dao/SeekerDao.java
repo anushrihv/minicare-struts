@@ -48,21 +48,21 @@ public class SeekerDao {
     }
 
     public Seeker getSeeker(int seekerId) throws ClassNotFoundException, SQLException{
-        Seeker seekerModel = new Seeker();
+        Seeker seeker = new Seeker();
         Connection connection = JDBCHelper.getConnection();
         String sql = "select MemberId,NumberOfChildren,SpouseName from seeker where MemberId=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1,seekerId);
         ResultSet resultSet = preparedStatement.executeQuery();
         if(resultSet.next()){
-            seekerModel.setMemberId(resultSet.getInt("MemberId"));
-            seekerModel.setNumberOfChildren(resultSet.getInt("NumberOfChildren"));
-            seekerModel.setSpouseName(resultSet.getString("SpouseName"));
+            seeker.setMemberId(resultSet.getInt("MemberId"));
+            seeker.setNumberOfChildren(resultSet.getInt("NumberOfChildren"));
+            seeker.setSpouseName(resultSet.getString("SpouseName"));
         }
 
         preparedStatement.close();
         connection.close();
-        return seekerModel;
+        return seeker;
     }
 
     public void editSeeker(Seeker seekerModel) throws ClassNotFoundException, SQLException{

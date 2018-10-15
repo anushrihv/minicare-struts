@@ -25,29 +25,13 @@ public class SeekerUtil {
         return seekerUtil;
     }
 
-    public SeekerForm populateSeekerFormBean(HttpServletRequest req) {
 
-        SeekerForm seekerForm = new SeekerForm();
-        seekerForm.setMemberId(req.getParameter("memberId"));
-        seekerForm.setFirstname(req.getParameter("firstname"));
-        seekerForm.setLastname(req.getParameter("lastname"));
-        seekerForm.setPhonenumber(req.getParameter("phonenumber"));
-        seekerForm.setEmail(req.getParameter("email"));
-        seekerForm.setAddress(req.getParameter("address"));
-        seekerForm.setPassword(req.getParameter("password"));
-        seekerForm.setPassword2(req.getParameter("password2"));
-        seekerForm.setSpouseName(req.getParameter("spousename"));
-        seekerForm.setNumberOfChildren(req.getParameter("numberofchildren"));
-        seekerForm.setType(Type.SEEKER.name());
-        req.setAttribute("SeekerForm", seekerForm);
-        return seekerForm;
-    }
-
-    public Seeker populateSeekerModel(SeekerForm seekerForm) {
+    public Seeker populateSeekerModel(SeekerForm seekerForm , boolean isRegister) {
         //SeekerForm seekerForm = populateSeekerFormBean(req);
         //SeekerForm seekerForm = (SeekerForm) req.getAttribute("SeekerForm");
         Seeker seekerModel = new Seeker();
         int numberOfChildren;
+        int memberId = Integer.parseInt(seekerForm.getMemberId());
         long phoneNumber = Long.parseLong(seekerForm.getPhonenumber());
 
         String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(seekerForm.getPassword());
@@ -57,6 +41,9 @@ public class SeekerUtil {
             numberOfChildren = 0;
         }
 
+
+        if(!isRegister)
+            seekerModel.setMemberId(memberId);
         seekerModel.setFirstName(seekerForm.getFirstname());
         seekerModel.setLastName(seekerForm.getLastname());
         seekerModel.setPhoneNumber(phoneNumber);
@@ -71,20 +58,6 @@ public class SeekerUtil {
         return seekerModel;
     }
 
-    public Seeker populateSeekerModelFromRequest(HttpServletRequest request){
-        Seeker seekerModel = new Seeker();
-        seekerModel.setMemberId(Integer.parseInt(request.getParameter("memberId")));
-        seekerModel.setFirstName(request.getParameter("firstname"));
-        seekerModel.setLastName(request.getParameter("lastname"));
-        seekerModel.setPhoneNumber(Long.parseLong(request.getParameter("phonenumber")));
-        seekerModel.setEmail(request.getParameter("email"));
-        seekerModel.setType(Type.SEEKER);
-        seekerModel.setAddress(request.getParameter("address"));
-        seekerModel.setNumberOfChildren(Integer.parseInt(request.getParameter("numberofchildren")));
-        seekerModel.setSpouseName(request.getParameter("spousename"));
-        seekerModel.setPassword(request.getParameter("password"));
-        return seekerModel;
-    }
 
     public void populateSeekerFormBeanBySeekerModel(Member member, SeekerForm seekerForm) throws ClassNotFoundException, SQLException {
         SeekerService seekerService = SeekerService.getInstance();

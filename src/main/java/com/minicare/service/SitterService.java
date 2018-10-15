@@ -39,11 +39,12 @@ public class SitterService {
     }
 
     public Sitter editSitterAccount(SitterForm sitterForm) throws ClassNotFoundException,SQLException, NamingException {
+        boolean isRegister = false;
         SitterUtil sitterUtil = SitterUtil.getInstance();
         SitterDao sitterDao = SitterDao.getInstance();
         MemberDao memberDao = MemberDao.getInstance();
 
-        Sitter sitterModel = sitterUtil.populateSitterModel(sitterForm);
+        Sitter sitterModel = sitterUtil.populateSitterModel(sitterForm,isRegister);
         sitterDao.editSitter(sitterModel);
         memberDao.editMember(sitterModel);
         return sitterModel;

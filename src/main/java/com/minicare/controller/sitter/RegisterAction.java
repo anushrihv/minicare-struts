@@ -1,6 +1,7 @@
 package com.minicare.controller.sitter;
 
 import com.minicare.dto.LoginForm;
+import com.minicare.dto.PasswordHashHelper;
 import com.minicare.dto.SitterForm;
 import com.minicare.exception.MiniCareException;
 import com.minicare.service.MemberService;
@@ -21,6 +22,8 @@ public class RegisterAction extends Action {
             VisitorService visitorService = VisitorService.getInstance();
             MemberService memberService = MemberService.getInstance();
             SitterForm sitterForm = (SitterForm)form;
+            sitterForm.setPassword(PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword()));
+            sitterForm.setPassword(PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword2()));
             ActionErrors actionErrors = new ActionErrors();
 
             if (!memberService.uniqueEmail(sitterForm.getEmail())) {

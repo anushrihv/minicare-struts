@@ -42,18 +42,21 @@ public class VisitorService{
 
 
     public void storeSitterDetails(SitterForm sitterForm,HttpSession session) throws SQLException,ClassNotFoundException{
+        boolean isRegister = true;
         VisitorUtil visitorUtil = VisitorUtil.getInstance();
         SitterUtil sitterUtil = SitterUtil.getInstance();
-        Sitter sitterModel = sitterUtil.populateSitterModel(sitterForm);
+        Sitter sitterModel = sitterUtil.populateSitterModel(sitterForm,isRegister);
         sitterDao = SitterDao.getInstance();
         sitterDao.insertSitter(sitterModel);
         visitorUtil.populateModelFromDb(sitterModel.getEmail(),session);
     }
 
     public void storeSeekerDetails(SeekerForm seekerForm,HttpSession session) throws SQLException,ClassNotFoundException {
+        boolean isRegister = true ;
         VisitorUtil visitorUtil = VisitorUtil.getInstance();
         SeekerUtil seekerUtil = SeekerUtil.getInstance();
-        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm);
+
+        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm,isRegister);
         seekerDao = SeekerDao.getInstance();
         seekerDao.insertSeeker(seekerModel);
         visitorUtil.populateModelFromDb(seekerModel.getEmail(),session);
