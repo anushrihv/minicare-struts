@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.minicare.model.Member" table="member">
+        <id name="memberId" column="id" >
+            <generator class="increment" />
+        </id>
+        <property name="firstName" column="FirstName" />
+        <property name="lastName" column="LastName" />
+        <property name="phoneNumber" column="PhoneNumber" />
+        <property name="email" column="EmailAddress" />
+        <property name="type" column="Type" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.minicare.model.Type</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="address" column="Address" />
+        <property name="status" column="Status" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.minicare.model.Status</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="password" column="Password" />
+
+        <joined-subclass name="com.minicare.model.Sitter" table="sitter">
+            <key column="MemberId" />
+            <property name="yearsOfExperience" column="YearsOfExperience" />
+            <property name="expectedPay" column="ExpectedPay" />
+        </joined-subclass>
+
+        <joined-subclass name="com.minicare.model.Seeker" table="seeker">
+            <key column="MemberId" />
+            <property name="numberOfChildren" column="NumberOfChildren" />
+            <property name="spouseName" column="SpouseName" />
+        </joined-subclass>
+    </class>
+
+</hibernate-mapping>

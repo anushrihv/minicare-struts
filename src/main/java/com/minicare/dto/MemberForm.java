@@ -19,6 +19,7 @@ public class MemberForm extends ActionForm {
     private String password;
     private String password2;
     private String editform;
+    private String status;
 
     public String getMemberId() {
         return memberId;

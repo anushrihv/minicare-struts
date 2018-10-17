@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class VisitorService{
@@ -67,12 +68,12 @@ public class VisitorService{
         LoginForm loginForm = (LoginForm) actionForm;
         boolean status=true;
         memberDao = MemberDao.getInstance();
-        Set<Member> memberSet = memberDao.getMember(loginForm.getEmail());
-        Iterator<Member> iterator = memberSet.iterator();
+        List memberSet = memberDao.getMember(loginForm.getEmail());
+        Iterator iterator = memberSet.iterator();
         if(!iterator.hasNext()){
             status=false;
         }else{
-            Member member = iterator.next();
+            Member member = (Member) iterator.next();
             String memberStatus = member.getStatus().name();
             if(memberStatus.equals("INACTIVE")){
                 status=false;

@@ -31,7 +31,7 @@ public class SeekerUtil {
         //SeekerForm seekerForm = (SeekerForm) req.getAttribute("SeekerForm");
         Seeker seekerModel = new Seeker();
         int numberOfChildren;
-        int memberId = Integer.parseInt(seekerForm.getMemberId());
+
         long phoneNumber = Long.parseLong(seekerForm.getPhonenumber());
 
         String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(seekerForm.getPassword());
@@ -43,7 +43,7 @@ public class SeekerUtil {
 
 
         if(!isRegister)
-            seekerModel.setMemberId(memberId);
+            seekerModel.setMemberId(Integer.parseInt(seekerForm.getMemberId()));
         seekerModel.setFirstName(seekerForm.getFirstname());
         seekerModel.setLastName(seekerForm.getLastname());
         seekerModel.setPhoneNumber(phoneNumber);

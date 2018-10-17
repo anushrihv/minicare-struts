@@ -1,6 +1,7 @@
 package com.minicare.controller.seeker;
 
 import com.minicare.dto.SeekerForm;
+import com.minicare.model.Type;
 import com.minicare.service.MemberService;
 import com.minicare.service.VisitorService;
 import org.apache.struts.action.*;
@@ -15,6 +16,7 @@ public class RegisterAction extends Action {
         MemberService memberService = MemberService.getInstance();
         VisitorService visitorService = VisitorService.getInstance();
         SeekerForm seekerForm = (SeekerForm) form;
+        seekerForm.setType(Type.SEEKER.name());
         ActionErrors actionErrors = new ActionErrors();
 
         if(!memberService.uniqueEmail(seekerForm.getEmail())){

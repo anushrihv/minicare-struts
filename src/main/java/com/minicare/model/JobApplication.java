@@ -1,6 +1,8 @@
 package com.minicare.model;
 
-public class JobApplication {
+import java.io.Serializable;
+
+public class JobApplication implements Serializable {
     int jobId;
     int memberId;
     double expectedPay;

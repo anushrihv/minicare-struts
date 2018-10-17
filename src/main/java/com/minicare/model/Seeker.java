@@ -1,6 +1,8 @@
 package com.minicare.model;
 
-public class Seeker extends Member {
+import java.io.Serializable;
+
+public class Seeker extends Member implements Serializable {
     private int numberOfChildren;
     private String spouseName;
 

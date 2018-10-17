@@ -34,6 +34,7 @@ C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\Val
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\RegisterAction.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\SeekerForm.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\EditJobAction.java
+C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dao\HibernateUtil.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\ListJob.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dao\JDBCHelper.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\ApplyJobForm.java

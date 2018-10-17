@@ -4,6 +4,7 @@ import com.minicare.dto.LoginForm;
 import com.minicare.dto.PasswordHashHelper;
 import com.minicare.dto.SitterForm;
 import com.minicare.exception.MiniCareException;
+import com.minicare.model.Type;
 import com.minicare.service.MemberService;
 import com.minicare.service.VisitorService;
 import org.apache.struts.action.*;
@@ -22,6 +23,8 @@ public class RegisterAction extends Action {
             VisitorService visitorService = VisitorService.getInstance();
             MemberService memberService = MemberService.getInstance();
             SitterForm sitterForm = (SitterForm)form;
+            sitterForm.setType(Type.SITTER.name());
+
             sitterForm.setPassword(PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword()));
             sitterForm.setPassword(PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword2()));
             ActionErrors actionErrors = new ActionErrors();

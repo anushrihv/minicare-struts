@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class MemberService {
@@ -27,10 +28,10 @@ public class MemberService {
         return memberService;
     }
 
-    public  boolean uniqueEmail(String email) throws ClassNotFoundException, SQLException {
+    public  boolean uniqueEmail(String email)  {
         MemberDao memberDao = MemberDao.getInstance();
-        Set<Member> memberSet = memberDao.getMember(email);
-        Iterator<Member> iterator = memberSet.iterator();
+        List memberList = memberDao.getMember(email);
+        Iterator iterator = memberList.iterator();
         if(iterator.hasNext()){
             return false;
         }

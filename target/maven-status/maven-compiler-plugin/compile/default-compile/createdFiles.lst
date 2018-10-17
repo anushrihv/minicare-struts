@@ -24,6 +24,7 @@ com\minicare\model\Status.class
 com\minicare\controller\seeker\SeekerUtil.class
 com\minicare\controller\sitter\SitterUtil.class
 com\minicare\controller\seeker\UpdateJob.class
+com\minicare\dao\HibernateUtil.class
 com\minicare\controller\sitter\SitterHomePage.class
 com\minicare\controller\seeker\ListApplications.class
 com\minicare\controller\seeker\RegisterAction.class

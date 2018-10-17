@@ -1,8 +1,9 @@
 package com.minicare.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Job {
+public class Job implements Serializable {
     int id;
     String jobTitle;
     int postedBy;

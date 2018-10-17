@@ -1,6 +1,8 @@
 package com.minicare.model;
 
-public class Member {
+import java.io.Serializable;
+
+public class Member implements Serializable {
     private int memberId;
     private String firstName;
     private String lastName;
@@ -76,6 +78,9 @@ public class Member {
     }
 
     public Status getStatus() {
+        if(status==null){
+            status = Status.ACTIVE ;
+        }
         return status;
     }
 

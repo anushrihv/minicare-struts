@@ -22,11 +22,14 @@
     </build>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/struts/struts -->
         <dependency>
             <groupId>struts</groupId>
             <artifactId>struts</artifactId>
             <version>1.2.9</version>
         </dependency>
+
+
 
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
@@ -75,6 +78,19 @@
             <version>4.2.6.Final</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/antlr/antlr -->
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>2.7.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+        </dependency>
 
     </dependencies>
 </project>

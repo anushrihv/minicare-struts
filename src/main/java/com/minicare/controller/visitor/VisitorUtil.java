@@ -6,6 +6,7 @@ import com.minicare.model.Member;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class VisitorUtil {
@@ -27,9 +28,9 @@ public class VisitorUtil {
     public void populateModelFromDb(String email, HttpSession session) throws SQLException,ClassNotFoundException{
         MemberDao memberDao = MemberDao.getInstance();
 
-        Set<Member> memberSet = memberDao.getMember(email);
-        Iterator<Member> iterator = memberSet.iterator();
-        Member member = iterator.next();
+        List memberSet = memberDao.getMember(email);
+        Iterator iterator = memberSet.iterator();
+        Member member = (Member) iterator.next();
 
         session.setAttribute("CurrentUser", member);
     }

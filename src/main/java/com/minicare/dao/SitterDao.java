@@ -3,6 +3,9 @@ package com.minicare.dao;
 import com.minicare.model.*;
 import com.minicare.model.Member;
 import com.minicare.model.Sitter;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,26 +29,34 @@ public class SitterDao{
         return sitterDao;
     }
 
-    public void insertSitter(Sitter sitterModel) throws ClassNotFoundException, SQLException {
-        Connection connection = JDBCHelper.getConnection();
-        PreparedStatement preparedStatement;
-        MemberDao memberDao = MemberDao.getInstance();
-        memberDao.insertMember(connection,sitterModel);
+//    public void insertSitter(Sitter sitterModel) throws ClassNotFoundException, SQLException {
+//        Connection connection = JDBCHelper.getConnection();
+//        PreparedStatement preparedStatement;
+//        MemberDao memberDao = MemberDao.getInstance();
+//        memberDao.insertMember(connection,sitterModel);
+//
+//        Set<Member> memberSet = memberDao.getMember(sitterModel.getEmail());
+//        Iterator<Member> iterator = memberSet.iterator();
+//        Member member = iterator.next();
+//        int id = member.getMemberId();
+//
+//        String sql = "insert into sitter(MemberId,YearsOfExperience,ExpectedPay) values (?,?,?)";
+//        preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.setInt(1,id);
+//        preparedStatement.setInt(2,sitterModel.getYearsOfExperience());
+//        preparedStatement.setDouble(3,sitterModel.getExpectedPay());
+//        preparedStatement.executeUpdate();
+//
+//        try { preparedStatement.close(); } catch (Exception e) { /* ignored */ }
+//        try { connection.close(); } catch (Exception e) { /* ignored */ }
+//    }
 
-        Set<Member> memberSet = memberDao.getMember(sitterModel.getEmail());
-        Iterator<Member> iterator = memberSet.iterator();
-        Member member = iterator.next();
-        int id = member.getMemberId();
-
-        String sql = "insert into sitter(MemberId,YearsOfExperience,ExpectedPay) values (?,?,?)";
-        preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1,id);
-        preparedStatement.setInt(2,sitterModel.getYearsOfExperience());
-        preparedStatement.setDouble(3,sitterModel.getExpectedPay());
-        preparedStatement.executeUpdate();
-
-        try { preparedStatement.close(); } catch (Exception e) { /* ignored */ }
-        try { connection.close(); } catch (Exception e) { /* ignored */ }
+    public void insertSitter(Sitter sitter){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(sitter);
+        transaction.commit();
+        session.close();
     }
 
     public void deleteSitter(int memberId) throws ClassNotFoundException, SQLException{
@@ -78,16 +89,29 @@ public class SitterDao{
         return sitterModel;
     }
 
-    public void editSitter(Sitter sitterModel) throws ClassNotFoundException, SQLException{
-        Connection connection = JDBCHelper.getConnection();
-        String sql = "update sitter SET YearsOfExperience=? , ExpectedPay=? where MemberId=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1,sitterModel.getYearsOfExperience());
-        preparedStatement.setDouble(2,sitterModel.getExpectedPay());
-        preparedStatement.setInt(3,sitterModel.getMemberId());
-        preparedStatement.executeUpdate();
+//    public void editSitter(Sitter sitterModel) throws ClassNotFoundException, SQLException{
+//        Connection connection = JDBCHelper.getConnection();
+//        String sql = "update sitter SET YearsOfExperience=? , ExpectedPay=? where MemberId=?";
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.setInt(1,sitterModel.getYearsOfExperience());
+//        preparedStatement.setDouble(2,sitterModel.getExpectedPay());
+//        preparedStatement.setInt(3,sitterModel.getMemberId());
+//        preparedStatement.executeUpdate();
+//
+//        preparedStatement.close();
+//        connection.close();
+//    }
 
-        preparedStatement.close();
-        connection.close();
+    public void editSitter(Sitter sitter){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update Sitter SET yearsOfExperience=? , expectedPay=? where memberId=?";
+        Query query = session.createQuery(hql);
+        query.setInteger(0,sitter.getYearsOfExperience());
+        query.setDouble(1,sitter.getExpectedPay());
+        query.setInteger(2,sitter.getMemberId());
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
     }
 }

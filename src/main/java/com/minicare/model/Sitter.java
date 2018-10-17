@@ -1,6 +1,8 @@
 package com.minicare.model;
 
-public class Sitter extends Member {
+import java.io.Serializable;
+
+public class Sitter extends Member implements Serializable {
     private int yearsOfExperience;
     private double expectedPay;
 
