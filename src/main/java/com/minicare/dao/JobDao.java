@@ -3,6 +3,9 @@ package com.minicare.dao;
 import com.minicare.model.Job;
 import com.minicare.model.Member;
 import com.minicare.model.Status;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,49 +30,42 @@ public class JobDao {
         return jobDao;
     }
 
-    public void storeJob(Job job, Member member) throws ClassNotFoundException, SQLException {
-        Connection connection = JDBCHelper.getConnection();
+//    public void storeJob(Job job, Member member) throws ClassNotFoundException, SQLException {
+//        Connection connection = JDBCHelper.getConnection();
+//
+//        int id = member.getMemberId();
+//
+//        String sql = "insert into job(Title,PostedBy,StartDateTime,EndDateTime,PayPerHour) values(?,?,?,?,?)";
+//        preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.setString(1, job.getJobTitle());
+//        preparedStatement.setInt(2,id);
+//        preparedStatement.setTimestamp(3, job.getStartDateTime());
+//        preparedStatement.setTimestamp(4, job.getEndDateTime());
+//        preparedStatement.setDouble(5, job.getPayPerHour());
+//        preparedStatement.executeUpdate();
+//        connection.close();
+//    }
 
-        int id = member.getMemberId();
-
-        String sql = "insert into job(Title,PostedBy,StartDateTime,EndDateTime,PayPerHour) values(?,?,?,?,?)";
-        preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, job.getJobTitle());
-        preparedStatement.setInt(2,id);
-        preparedStatement.setTimestamp(3, job.getStartDateTime());
-        preparedStatement.setTimestamp(4, job.getEndDateTime());
-        preparedStatement.setDouble(5, job.getPayPerHour());
-        preparedStatement.executeUpdate();
-        connection.close();
+    public void storeJob(Job job , Member member){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        job.setPostedBy(member.getMemberId());
+        job.setStatus(Status.ACTIVE);
+        session.save(job);
+        transaction.commit();
+        session.close();
     }
 
-    public List<Job> getJobsById(Member member) throws ClassNotFoundException,SQLException{
-        Connection connection = JDBCHelper.getConnection();
-        List<Job> jobList = new ArrayList<Job>();
-
-        int id = member.getMemberId();
-
-        String sql = "select * from job where Status=? and PostedBy=?";
-        preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, Status.ACTIVE.name());
-        preparedStatement.setInt(2,id);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (true){
-           boolean contains = resultSet.next();
-           if(contains){
-               Job job = new Job();
-               job.setId(resultSet.getInt("Id"));
-               job.setJobTitle(resultSet.getString("Title"));
-               job.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
-               job.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
-               job.setPayPerHour(resultSet.getInt("PayPerHour"));
-               job.setStatus(Status.valueOf(resultSet.getString("Status")));
-               jobList.add(job);
-           }else{
-               break;
-           }
-        }
-        connection.close();
+    public List<Job> getJobsById(Member member){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "from Job where status=? and postedBy = ?";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,Status.ACTIVE);
+        query.setInteger(1,member.getMemberId());
+        List<Job> jobList = query.list();
+        transaction.commit();
+        session.close();
         return jobList;
     }
 
@@ -131,17 +127,32 @@ public class JobDao {
         connection.close();
     }
 
-    public void updateJob(Job job) throws ClassNotFoundException, SQLException {
-        Connection connection = JDBCHelper.getConnection();
-        String sql ="update job SET Title=? , StartDateTime=? , EndDateTime=? , PayPerHour=? where Id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, job.getJobTitle());
-        preparedStatement.setTimestamp(2, job.getStartDateTime());
-        preparedStatement.setTimestamp(3, job.getEndDateTime());
-        preparedStatement.setDouble(4,Double.valueOf(job.getPayPerHour()));
-        preparedStatement.setInt(5, job.getId());
-        preparedStatement.executeUpdate();
-        connection.close();
+//    public void updateJob(Job job) throws ClassNotFoundException, SQLException {
+//        Connection connection = JDBCHelper.getConnection();
+//        String sql ="update job SET Title=? , StartDateTime=? , EndDateTime=? , PayPerHour=? where Id=?";
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.setString(1, job.getJobTitle());
+//        preparedStatement.setTimestamp(2, job.getStartDateTime());
+//        preparedStatement.setTimestamp(3, job.getEndDateTime());
+//        preparedStatement.setDouble(4,Double.valueOf(job.getPayPerHour()));
+//        preparedStatement.setInt(5, job.getId());
+//        preparedStatement.executeUpdate();
+//        connection.close();
+//    }
+
+    public void updateJob(Job job){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update Job SET jobTitle=? , startDateTime=? , endDateTime=? , payPerHour=? where id=?";
+        Query query = session.createQuery(hql);
+        query.setString(0,job.getJobTitle());
+        query.setParameter(1,job.getStartDateTime());
+        query.setParameter(2,job.getEndDateTime());
+        query.setDouble(3,job.getPayPerHour());
+        query.setInteger(4,job.getId());
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
     }
 
     public void closeJobByMemberId(int memberId) throws ClassNotFoundException,SQLException{

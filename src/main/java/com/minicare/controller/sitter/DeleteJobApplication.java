@@ -2,7 +2,7 @@ package com.minicare.controller.sitter;
 
 import com.minicare.dto.DeleteJobApplicationForm;
 import com.minicare.exception.MiniCareException;
-import com.minicare.dto.JobApplicationDTO;
+import com.minicare.dto.JobApplicationForm;
 import com.minicare.model.Member;
 import com.minicare.service.JobApplicationService;
 import org.apache.struts.action.Action;
@@ -26,8 +26,8 @@ public class DeleteJobApplication extends Action {
             Member member = (Member) req.getSession().getAttribute("CurrentUser");
             JobApplicationService jobApplicationService = JobApplicationService.getInstance();
             jobApplicationService.deleteJobApplication(jobId, member.getMemberId());
-            List<JobApplicationDTO> jobApplicationDTOList = jobApplicationService.getJobApplicationList(req);
-            req.setAttribute("MyJobApplicationList",jobApplicationDTOList);
+            List<JobApplicationForm> jobApplicationFormList = jobApplicationService.getJobApplicationList(req);
+            req.setAttribute("MyJobApplicationList", jobApplicationFormList);
             return mapping.findForward("listmyjobapplications");
         }catch (Exception e){
             Logger logger = Logger.getLogger("DeleteJobApplication");
@@ -42,7 +42,7 @@ public class DeleteJobApplication extends Action {
 //            Member memberModel = (Member) req.getSession().getAttribute("CurrentUser");
 //            JobApplicationService jobApplicationService = JobApplicationService.getInstance();
 //            jobApplicationService.deleteJobApplication(jobId,memberModel.getMemberId());
-//            List<JobApplicationDTO> jobApplicationDTOList = jobApplicationService.getJobApplicationList(req);
+//            List<JobApplicationForm> jobApplicationDTOList = jobApplicationService.getJobApplicationList(req);
 //            req.setAttribute("ActiveJobApplicationList",jobApplicationDTOList);
 //            getServletContext().getRequestDispatcher("/jsp/listMyJobApplications.jsp").forward(req,resp);
 //        }catch (Exception e){

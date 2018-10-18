@@ -30,6 +30,8 @@
 
         <!-- List of XML mapping files -->
         <mapping resource = "com/minicare/model/Member.hbm.xml" />
+        <mapping resource="com/minicare/model/Job.hbm.xml" />
+        <mapping resource="com/minicare/model/JobApplication.hbm.xml" />
 
     </session-factory>
 </hibernate-configuration>

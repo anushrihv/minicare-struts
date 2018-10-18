@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PostJobAction extends Action {
-    private JobForm jobForm;
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -38,22 +37,5 @@ public class PostJobAction extends Action {
         }
     }
 
-    private void action(HttpServletRequest req , HttpServletResponse resp){
-//        try {
-//                Member memberModel = (Member) req.getSession().getAttribute("CurrentUser");
-//                JobUtil jobUtil = JobUtil.getInstance();
-//                JobService jobService = JobService.getInstance();
-//                JobForm jobForm = jobUtil.populateJobFormBean(req);
-//
-//                jobService.storeJob(req);
-//                List<Job> jobModelList = jobService.getJobsById(memberModel);
-//                req.setAttribute("JobList",jobModelList);
-//                getServletContext().getRequestDispatcher("/jsp/listJobs.jsp").forward(req,resp);
-//
-//        }catch (Exception e){
-//            Logger logger = Logger.getLogger("PostJobAction");
-//            logger.log(Level.SEVERE,"exception occurred",e);
-//            throw new MiniCareException(e);
-//        }
-    }
+
 }

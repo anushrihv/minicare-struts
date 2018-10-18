@@ -2,3 +2,22 @@
 <!DOCTYPE hibernate-mapping PUBLIC
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.minicare.model.Job" table="job">
+        <id name="id" column="Id" >
+            <generator class="increment" />
+        </id>
+        <property name="jobTitle" column="Title" />
+        <property name="postedBy" column="PostedBy" />
+        <property name="startDateTime" column="StartDateTime" />
+        <property name="endDateTime" column="EndDateTime" />
+        <property name="payPerHour" column="PayPerHour" />
+        <property name="status" column="Status" >
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.minicare.model.Status</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+    </class>
+</hibernate-mapping>

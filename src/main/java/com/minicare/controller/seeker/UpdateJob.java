@@ -24,7 +24,6 @@ public class UpdateJob extends Action {
             JobForm jobForm = (JobForm) form ;
             int jobId = Integer.parseInt(jobForm.getId());
             JobService jobService = JobService.getInstance();
-            JobUtil jobUtil = JobUtil.getInstance();
             Job job = jobService.getJobByJobId(jobId);
             Member member = (Member) req.getSession(false).getAttribute("CurrentUser");
             if(member.getMemberId()!= job.getPostedBy()){

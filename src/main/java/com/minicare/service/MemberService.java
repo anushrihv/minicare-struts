@@ -3,6 +3,7 @@ package com.minicare.service;
 import com.minicare.dao.MemberDao;
 import com.minicare.dto.PasswordHashHelper;
 import com.minicare.model.Member;
+import com.minicare.model.Type;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMessage;
 
@@ -60,28 +61,16 @@ public class MemberService {
         return actionErrors;
     }
 
-    public void updatePassword(int memberId , String newPassword) throws NamingException, SQLException{
+    public void updatePassword(int memberId , String newPassword){
         MemberDao memberDao = MemberDao.getInstance();
         String newPasswordHash = PasswordHashHelper.get_SHA_256_SecurePassword(newPassword);
         memberDao.updatePassword(memberId,newPasswordHash);
     }
 
-    public Set<Member> searchMember(String email) throws NamingException, SQLException {
+    public List<Member> searchMember(String email, Type type){
         MemberDao memberDao = MemberDao.getInstance();
-//        Set<Member> memberSet = memberDao.getAllMembers();
-//        Set<Member> searchResultSet = new HashSet<>();
-//        Iterator<Member> iterator = memberSet.iterator();
-//        Member memberModel;
-//        while(iterator.hasNext()){
-//            memberModel = iterator.next();
-//            String dbemail = memberModel.getEmail();
-//            if(dbemail.contains(email)){
-//                searchResultSet.add(memberModel);
-//            }
-//        }
-//        return searchResultSet;
 
-        Set<Member> memberSet = memberDao.searchMember(email);
-        return memberSet;
+        List<Member> memberList = memberDao.searchMember(email,type);
+        return memberList;
     }
 }

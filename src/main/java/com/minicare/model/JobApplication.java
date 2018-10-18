@@ -3,6 +3,7 @@ package com.minicare.model;
 import java.io.Serializable;
 
 public class JobApplication implements Serializable {
+    int id;
     int jobId;
     int memberId;
     double expectedPay;
@@ -10,6 +11,14 @@ public class JobApplication implements Serializable {
 
     public JobApplication(){
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getJobId() {

@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +24,9 @@ public class SearchMember extends Action {
             SearchForm searchForm = (SearchForm) form ;
             String email = searchForm.getEmail();
             MemberService memberService = MemberService.getInstance();
-            Set<Member> memberSet = memberService.searchMember(email);
-            req.setAttribute("SearchResultSet", memberSet);
+            Member currentUser = (Member) req.getSession().getAttribute("CurrentUser");
+            List<Member> memberList = memberService.searchMember(email,currentUser.getType());
+            req.setAttribute("SearchResultSet", memberList);
             return mapping.findForward("/searchresult");
 
         }catch (Exception e){

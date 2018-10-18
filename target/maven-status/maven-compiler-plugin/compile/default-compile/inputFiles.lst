@@ -21,11 +21,11 @@ C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dao\Job
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\sitter\CloseAccountAction.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\model\Sitter.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\model\Status.java
+C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\JobApplicationForm.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\sitter\DeleteJobApplication.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dao\SeekerDao.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\model\Member.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\EditAccountFormAction.java
-C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\JobApplicationDTO.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\service\SitterService.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\exception\MiniCareException.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\CloseJob.java

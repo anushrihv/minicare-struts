@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -142,70 +143,78 @@ public class MemberDao {
 
     }
 
-    public void updatePassword(int memberId , String newPassword)  throws NamingException,SQLException{
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql = "update member SET password = ? where Id = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,newPassword);
-        preparedStatement.setInt(2,memberId);
-        preparedStatement.executeUpdate();
+//    public void updatePassword(int memberId , String newPassword)  throws NamingException,SQLException{
+//        Connection connection = JNDIHelper.getJNDIConnection();
+//        String sql = "update member SET password = ? where Id = ?";
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.setString(1,newPassword);
+//        preparedStatement.setInt(2,memberId);
+//        preparedStatement.executeUpdate();
+//
+//        preparedStatement.close();
+//        connection.close();
+//    }
 
-        preparedStatement.close();
-        connection.close();
+    public void updatePassword(int memberId , String newPassword){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update Member SET password = ? where memberId = ?";
+        Query query = session.createQuery(hql);
+        query.setString(0,newPassword);
+        query.setInteger(1,memberId);
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
     }
 
-    public Set<Member> getAllMembers() throws NamingException,SQLException{
-        Set<Member> memberSet = new HashSet<>();
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql = "select * from member where status=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,Status.ACTIVE.name());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while(true){
-            boolean contains = resultSet.next();
-            if(contains){
-                Member member = new Member();
-                member.setMemberId(resultSet.getInt("Id"));
-                member.setFirstName(resultSet.getString("FirstName"));
-                member.setLastName(resultSet.getString("LastName"));
-                member.setPhoneNumber(resultSet.getLong("PhoneNumber"));
-                member.setEmail(resultSet.getString("EmailAddress"));
-                member.setType(Type.valueOf(resultSet.getString("Type")));
-                member.setAddress(resultSet.getString("Address"));
-                member.setStatus(Status.ACTIVE);
-                memberSet.add(member);
-            }else{
-                break;
-            }
-        }
-        return memberSet;
-    }
 
-    public Set<Member> searchMember(String email) throws NamingException,SQLException{
-        Set<Member> memberSet = new HashSet<>();
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql = "select * from member where EmailAddress like ? and status=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,"%"+email+"%");
-        preparedStatement.setString(2,Status.ACTIVE.name());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while(true){
-            boolean contains = resultSet.next();
-            if(contains){
-                Member member = new Member();
-                member.setMemberId(resultSet.getInt("Id"));
-                member.setFirstName(resultSet.getString("FirstName"));
-                member.setLastName(resultSet.getString("LastName"));
-                member.setPhoneNumber(resultSet.getLong("PhoneNumber"));
-                member.setEmail(resultSet.getString("EmailAddress"));
-                member.setType(Type.valueOf(resultSet.getString("Type")));
-                member.setAddress(resultSet.getString("Address"));
-                member.setStatus(Status.ACTIVE);
-                memberSet.add(member);
-            }else{
-                break;
-            }
+//    public Set<Member> searchMember(String email,Type type) throws NamingException,SQLException{
+//        Set<Member> memberSet = new HashSet<>();
+//        Connection connection = JNDIHelper.getJNDIConnection();
+//        String sql = "select * from member where EmailAddress like ? and status=?";
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.setString(1,"%"+email+"%");
+//        preparedStatement.setString(2,Status.ACTIVE.name());
+//        ResultSet resultSet = preparedStatement.executeQuery();
+//        while(true){
+//            boolean contains = resultSet.next();
+//            if(contains){
+//                Member member = new Member();
+//                member.setMemberId(resultSet.getInt("Id"));
+//                member.setFirstName(resultSet.getString("FirstName"));
+//                member.setLastName(resultSet.getString("LastName"));
+//                member.setPhoneNumber(resultSet.getLong("PhoneNumber"));
+//                member.setEmail(resultSet.getString("EmailAddress"));
+//                member.setType(Type.valueOf(resultSet.getString("Type")));
+//                member.setAddress(resultSet.getString("Address"));
+//                member.setStatus(Status.ACTIVE);
+//                memberSet.add(member);
+//            }else{
+//                break;
+//            }
+//        }
+//        return memberSet;
+//    }
+
+    public List<Member> searchMember(String email , Type type){
+        List<Member> memberList ;
+        Type searchType ;
+        if(type.name().equals("SITTER")){
+            searchType = Type.SEEKER ;
         }
-        return memberSet;
+        else{
+            searchType = Type.SITTER ;
+        }
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "From Member where emailAddress like ? and type = ? and status = ?";
+        Query query = session.createQuery(hql);
+        query.setString(0,"%"+email+"%");
+        query.setParameter(1,searchType);
+        query.setParameter(2,Status.ACTIVE);
+        memberList = query.list();
+        transaction.commit();
+        session.close();
+        return memberList;
     }
 }

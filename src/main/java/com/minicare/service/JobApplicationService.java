@@ -1,7 +1,7 @@
 package com.minicare.service;
 
 import com.minicare.dao.JobApplicationDao;
-import com.minicare.dto.JobApplicationDTO;
+import com.minicare.dto.JobApplicationForm;
 import com.minicare.model.JobApplication;
 import com.minicare.model.Member;
 
@@ -31,7 +31,7 @@ public class JobApplicationService {
         populateJobApplicationModel(request,jobId,expectedPay);
         JobApplication jobApplication = (JobApplication) request.getAttribute("JobApplication");
         jobApplicationDao.storeJobApplication(jobApplication);
-//        List<JobApplicationDTO> jobApplicationDTOList = getJobApplicationList(request);
+//        List<JobApplicationForm> jobApplicationDTOList = getJobApplicationList(request);
 //        return jobApplicationDTOList;
     }
 
@@ -46,11 +46,11 @@ public class JobApplicationService {
         request.setAttribute("JobApplication", jobApplication);
     }
 
-    public List<JobApplicationDTO> getJobApplicationList(HttpServletRequest request) throws SQLException,NamingException{
+    public List<JobApplicationForm> getJobApplicationList(HttpServletRequest request) throws SQLException,NamingException{
         Member member = (Member) request.getSession().getAttribute("CurrentUser");
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
-        List<JobApplicationDTO> jobApplicationDTOList = jobApplicationDao.getJobApplicationList(member.getMemberId());
-        return jobApplicationDTOList;
+        List<JobApplicationForm> jobApplicationFormList = jobApplicationDao.getJobApplicationList(member.getMemberId());
+        return jobApplicationFormList;
     }
 
     public void deleteJobApplication(int jobId, int memberId) throws SQLException,NamingException{
@@ -58,10 +58,10 @@ public class JobApplicationService {
         jobApplicationDao.deleteJobApplication(jobId,memberId);
     }
 
-    public List<JobApplicationDTO> getJobApplicationsByJobId(int jobId) throws NamingException,SQLException{
+    public List<JobApplicationForm> getJobApplicationsByJobId(int jobId) throws NamingException,SQLException{
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
-        List<JobApplicationDTO> jobApplicationDTOList = jobApplicationDao.getJobApplicationsByJobId(jobId);
-        return jobApplicationDTOList;
+        List<JobApplicationForm> jobApplicationFormList = jobApplicationDao.getJobApplicationsByJobId(jobId);
+        return jobApplicationFormList;
     }
 
     public void closeSitterJobApplications(int sitterId) throws NamingException,SQLException{
