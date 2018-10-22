@@ -2,6 +2,7 @@ package com.minicare.dao;
 
 import com.minicare.model.Job;
 import com.minicare.model.Member;
+import com.minicare.model.Seeker;
 import com.minicare.model.Status;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -30,22 +31,6 @@ public class JobDao {
         return jobDao;
     }
 
-//    public void storeJob(Job job, Member member) throws ClassNotFoundException, SQLException {
-//        Connection connection = JDBCHelper.getConnection();
-//
-//        int id = member.getMemberId();
-//
-//        String sql = "insert into job(Title,PostedBy,StartDateTime,EndDateTime,PayPerHour) values(?,?,?,?,?)";
-//        preparedStatement = connection.prepareStatement(sql);
-//        preparedStatement.setString(1, job.getJobTitle());
-//        preparedStatement.setInt(2,id);
-//        preparedStatement.setTimestamp(3, job.getStartDateTime());
-//        preparedStatement.setTimestamp(4, job.getEndDateTime());
-//        preparedStatement.setDouble(5, job.getPayPerHour());
-//        preparedStatement.executeUpdate();
-//        connection.close();
-//    }
-
     public void storeJob(Job job , Member member){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -69,76 +54,55 @@ public class JobDao {
         return jobList;
     }
 
-    public List<Job> getJobs() throws ClassNotFoundException,SQLException{
-        Connection connection = JDBCHelper.getConnection();
-        List<Job> jobList = new ArrayList<Job>();
-
-        String sql = "select * from job where Status=?";
-        preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,Status.ACTIVE.name());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while(true){
-            boolean contains = resultSet.next();
-            if(contains){
-                Job job = new Job();
-                job.setId(resultSet.getInt("Id"));
-                job.setJobTitle(resultSet.getString("Title"));
-                job.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
-                job.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
-                job.setPayPerHour(resultSet.getInt("PayPerHour"));
-                job.setStatus(Status.valueOf(resultSet.getString("Status")));
-                jobList.add(job);
-            }else{
-                break;
-            }
-        }
-        connection.close();
+    public List<Job> getJobs(){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "from Job where status=?";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,Status.ACTIVE);
+        List<Job> jobList = query.list();
+        transaction.commit();
+        session.close();
         return jobList;
     }
 
-    public Job getJobByJobId(int jobId) throws ClassNotFoundException,SQLException{
-        Connection connection = JDBCHelper.getConnection();
-        String sql ="select * from job where Id=? and status=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1,jobId);
-        preparedStatement.setString(2,Status.ACTIVE.name());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if(resultSet.next()){
-            Job job = new Job();
-            job.setId(resultSet.getInt("Id"));
-            job.setJobTitle(resultSet.getString("Title"));
-            job.setPostedBy(resultSet.getInt("PostedBy"));
-            job.setStartDateTime(resultSet.getTimestamp("StartDateTime"));
-            job.setEndDateTime(resultSet.getTimestamp("EndDateTime"));
-            job.setPayPerHour(resultSet.getDouble("PayPerHour"));
-            job.setStatus(Status.valueOf(resultSet.getString("Status")));
-            return job;
+    public Job getJobByJobId(int jobId){
+        Job job = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "from Job where id=? and status=?";
+        Query query = session.createQuery(hql);
+        query.setInteger(0,jobId);
+        query.setParameter(1,Status.ACTIVE);
+        List<Job> jobList = query.list();
+        if(jobList.size()>0){
+            job = jobList.get(0);
         }
-        return null;
+        session.close();
+        return job;
     }
 
-    public void closeJob(int jobId) throws ClassNotFoundException,SQLException{
-        Connection connection = JDBCHelper.getConnection();
-        String sql ="update job SET Status=? where Id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,Status.INACTIVE.name());
-        preparedStatement.setInt(2,jobId);
-        preparedStatement.executeUpdate();
-        connection.close();
-    }
-
-//    public void updateJob(Job job) throws ClassNotFoundException, SQLException {
+//    public void closeJob(int jobId) throws ClassNotFoundException,SQLException{
 //        Connection connection = JDBCHelper.getConnection();
-//        String sql ="update job SET Title=? , StartDateTime=? , EndDateTime=? , PayPerHour=? where Id=?";
+//        String sql ="update job SET Status=? where Id=?";
 //        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        preparedStatement.setString(1, job.getJobTitle());
-//        preparedStatement.setTimestamp(2, job.getStartDateTime());
-//        preparedStatement.setTimestamp(3, job.getEndDateTime());
-//        preparedStatement.setDouble(4,Double.valueOf(job.getPayPerHour()));
-//        preparedStatement.setInt(5, job.getId());
+//        preparedStatement.setString(1,Status.INACTIVE.name());
+//        preparedStatement.setInt(2,jobId);
 //        preparedStatement.executeUpdate();
 //        connection.close();
 //    }
+
+    public void closeJob(int jobId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update Job SET status=? where id=?";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,Status.INACTIVE);
+        query.setInteger(1,jobId);
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
+    }
 
     public void updateJob(Job job){
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -155,15 +119,15 @@ public class JobDao {
         session.close();
     }
 
-    public void closeJobByMemberId(int memberId) throws ClassNotFoundException,SQLException{
-        Connection connection = JDBCHelper.getConnection();
-        String sql = "update job SET Status=? where PostedBy=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,Status.INACTIVE.name());
-        preparedStatement.setInt(2,memberId);
-        preparedStatement.executeUpdate();
-
-        preparedStatement.close();
-        connection.close();
+    public void closeJobByMemberId(int memberId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update Job SET status=? where postedBy=?";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,Status.INACTIVE);
+        query.setInteger(1,memberId);
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
     }
 }

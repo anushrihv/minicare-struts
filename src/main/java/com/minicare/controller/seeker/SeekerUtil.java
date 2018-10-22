@@ -34,7 +34,7 @@ public class SeekerUtil {
 
         long phoneNumber = Long.parseLong(seekerForm.getPhonenumber());
 
-        String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(seekerForm.getPassword());
+        //String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(seekerForm.getPassword());
         try {
             numberOfChildren = Integer.parseInt(seekerForm.getNumberOfChildren());
         }catch(NumberFormatException e){
@@ -50,7 +50,7 @@ public class SeekerUtil {
         seekerModel.setEmail(seekerForm.getEmail());
         seekerModel.setType(Type.SEEKER);
         seekerModel.setAddress(seekerForm.getAddress());
-        seekerModel.setPassword(passwordHash);
+        seekerModel.setPassword(seekerForm.getPassword());
         seekerModel.setNumberOfChildren(numberOfChildren);
         seekerModel.setSpouseName(seekerForm.getSpouseName());
 

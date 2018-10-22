@@ -28,6 +28,8 @@
         
         <property name="hibernate.show_sql" >true</property>
 
+
+
         <!-- List of XML mapping files -->
         <mapping resource = "com/minicare/model/Member.hbm.xml" />
         <mapping resource="com/minicare/model/Job.hbm.xml" />

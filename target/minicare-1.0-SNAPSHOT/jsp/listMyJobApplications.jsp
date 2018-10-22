@@ -37,7 +37,7 @@ text-align:center
         <div align="right"><html:form action="/sitterhomepage" > <html:submit value="HOME" /> </html:form></div>
         <c:choose>
         <c:when test="${MyJobApplicationList.size()==0}">
-        <h2 align="center"> NO JOBS TO DISPLAY </h2>
+        <h2 align="center"> NO JOBS APPLICATIONS TO DISPLAY </h2>
         </c:when>
         <c:otherwise>
         <table>
@@ -49,13 +49,13 @@ text-align:center
             </tr>
             <c:forEach items="${MyJobApplicationList}" var="Job">
             <tr>
-               <td><c:out value="${Job.jobTitle}" /></td>
+                 <td><c:out value="${Job.job.jobTitle}" /></td>
                <td><c:out value="${Job.expectedPay}" /></td>
-               <td><c:out value="${Job.payPerHour}" /></td>
+               <td><c:out value="${Job.job.payPerHour}" /></td>
                <td><c:out value="${Job.status}" /></td>
                 <td>
                 <html:form action="/sitter/deletejobapplication.do" method="post">
-                   <html:hidden property="id" value="${Job.jobId}" />
+                   <html:hidden property="id" value="${Job.job.id}" />
                    <html:submit value="Delete" />
                 </html:form>
                 </td>

@@ -39,18 +39,18 @@ public class SeekerService {
         return jobList;
     }
 
-    public void closeSeekerAccount(int seekerId) throws NamingException,SQLException{
+    public void closeSeekerAccount(int seekerId) {
         MemberDao memberDao = MemberDao.getInstance();
         memberDao.deleteMember(seekerId);
     }
 
-    public Seeker getSeeker(int seekerId) throws ClassNotFoundException,SQLException{
+    public Seeker getSeeker(int seekerId){
         SeekerDao seekerDao = SeekerDao.getInstance();
         return seekerDao.getSeeker(seekerId);
     }
 
 
-    public Seeker editSeekerAccount(SeekerForm seekerForm) throws ClassNotFoundException,SQLException, NamingException {
+    public Seeker editSeekerAccount(SeekerForm seekerForm) {
         boolean isRegister = false;
         SeekerUtil seekerUtil = SeekerUtil.getInstance();
         SeekerDao seekerDao = SeekerDao.getInstance();

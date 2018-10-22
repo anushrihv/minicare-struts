@@ -1,21 +1,13 @@
 package com.minicare.dao;
 
-import com.minicare.model.Member;
 import com.minicare.model.Seeker;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 public class SeekerDao {
     private static SeekerDao seekerDao;
-    private PreparedStatement preparedStatement;
 
     private SeekerDao(){
 
@@ -29,26 +21,6 @@ public class SeekerDao {
         return seekerDao;
     }
 
-//    public void insertSeeker(Seeker seekerModel) throws ClassNotFoundException, SQLException {
-//            Connection connection = JDBCHelper.getConnection();
-//            MemberDao memberDao = MemberDao.getInstance();
-//            memberDao.insertMember(connection, seekerModel);
-//
-//            Set<Member> memberSet = memberDao.getMember(seekerModel.getEmail());
-//            Iterator<Member> iterator = memberSet.iterator();
-//            Member member = iterator.next();
-//            int id = member.getMemberId();
-//
-//            String sql = "insert into seeker(MemberId,NumberOfChildren,SpouseName) values (?,?,?)";
-//            preparedStatement = connection.prepareStatement(sql);
-//            preparedStatement.setInt(1, id);
-//            preparedStatement.setInt(2, seekerModel.getNumberOfChildren());
-//            preparedStatement.setString(3, seekerModel.getSpouseName());
-//            preparedStatement.executeUpdate();
-//
-//            try { preparedStatement.close(); } catch (Exception e) { /* ignored */ }
-//            try { JDBCHelper.closeConnection(); } catch (Exception e) { /* ignored */ }
-//    }
 
     public void insertSeeker(Seeker seeker){
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -58,36 +30,21 @@ public class SeekerDao {
         session.close();
     }
 
-    public Seeker getSeeker(int seekerId) throws ClassNotFoundException, SQLException{
-        Seeker seeker = new Seeker();
-        Connection connection = JDBCHelper.getConnection();
-        String sql = "select MemberId,NumberOfChildren,SpouseName from seeker where MemberId=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1,seekerId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if(resultSet.next()){
-            seeker.setMemberId(resultSet.getInt("MemberId"));
-            seeker.setNumberOfChildren(resultSet.getInt("NumberOfChildren"));
-            seeker.setSpouseName(resultSet.getString("SpouseName"));
-        }
 
-        preparedStatement.close();
-        connection.close();
+    public Seeker getSeeker(int seekerId){
+        Seeker seeker = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "from Seeker where memberId = ?";
+        Query query = session.createQuery(hql);
+        query.setInteger(0,seekerId);
+        List<Seeker> seekerList = query.list();
+        if(seekerList.size()>0)
+            seeker = (Seeker) seekerList.get(0);
+        transaction.commit();
+        session.close();
         return seeker;
     }
-
-//    public void editSeeker(Seeker seekerModel) throws ClassNotFoundException, SQLException{
-//        Connection connection = JDBCHelper.getConnection();
-//        String sql = "update seeker SET NumberOfChildren=? , SpouseName=? where MemberId=?";
-//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        preparedStatement.setInt(1,seekerModel.getNumberOfChildren());
-//        preparedStatement.setString(2,seekerModel.getSpouseName());
-//        preparedStatement.setInt(3,seekerModel.getMemberId());
-//        preparedStatement.executeUpdate();
-//
-//        preparedStatement.close();
-//        connection.close();
-//    }
 
     public void editSeeker(Seeker seeker){
         Session session = HibernateUtil.getSessionFactory().openSession();

@@ -8,9 +8,18 @@ public class JobApplication implements Serializable {
     int memberId;
     double expectedPay;
     Status status;
+    Job job;
 
     public JobApplication(){
 
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
     }
 
     public int getId() {

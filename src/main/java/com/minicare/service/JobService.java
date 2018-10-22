@@ -65,7 +65,7 @@ public class JobService {
         jobDao.updateJob(job);
     }
 
-    public List<Job> getJobs(Member member) throws ClassNotFoundException,SQLException, NamingException {
+    public List<Job> getJobs(Member member){
         JobDao jobDao = JobDao.getInstance();
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
         List<Job> jobList = jobDao.getJobs();

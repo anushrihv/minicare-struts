@@ -30,164 +30,117 @@ public class JobApplicationDao {
         return jobApplicationDao;
     }
 
-    public void storeJobApplication(JobApplication jobApplication) throws SQLException, NamingException {
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql = "insert into jobapplication(JobId,MemberId,ExpectedPay) values (?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1, jobApplication.getJobId());
-        preparedStatement.setInt(2, jobApplication.getMemberId());
-        preparedStatement.setDouble(3, jobApplication.getExpectedPay());
-        preparedStatement.executeUpdate();
-
-        preparedStatement.close();
-        connection.close();
+    public void storeJobApplication(JobApplication jobApplication){
+        jobApplication.setStatus(Status.ACTIVE);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(jobApplication);
+        transaction.commit();
+        session.close();
     }
 
-    public List<JobApplicationForm> getJobApplicationList(int memberId) throws SQLException,NamingException{
-        List<JobApplicationForm> jobApplicationFormList = new ArrayList<JobApplicationForm>();
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql = "select ja.Id , ja.JobId , ja.MemberId , j.Title , ja.ExpectedPay , j.PayPerHour , ja.Status " +
-                "from jobapplication as ja , job as j , member as m " +
-                "where ja.JobId = j.Id and ja.MemberId = m.Id and ja.MemberId=? and ja.Status=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1,memberId);
-        preparedStatement.setString(2,Status.ACTIVE.name());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while(true){
-            boolean contains = resultSet.next();
-            if(contains){
-                JobApplicationForm jobApplicationForm = new JobApplicationForm();
-                jobApplicationForm.setJobApplicationId(resultSet.getInt("Id"));
-                jobApplicationForm.setJobId(resultSet.getInt("JobId"));
-                jobApplicationForm.setMemberId(resultSet.getInt("MemberId"));
-                jobApplicationForm.setJobTitle(resultSet.getString("Title"));
-                jobApplicationForm.setExpectedPay(resultSet.getDouble("ExpectedPay"));
-                jobApplicationForm.setPayPerHour(resultSet.getDouble("PayPerHour"));
-                jobApplicationForm.setStatus(Status.valueOf(resultSet.getString("Status")));
-                jobApplicationFormList.add(jobApplicationForm);
-            }else{
-                break;
-            }
-        }
-        preparedStatement.close();
-        connection.close();
-        return jobApplicationFormList;
+    public List<JobApplication> getJobApplicationList(int memberId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "from JobApplication where status=:status and memberId=:memberid";
+        Query query = session.createQuery(hql);
+        query.setParameter("status",Status.ACTIVE);
+        query.setInteger("memberid",memberId);
+        List<JobApplication> jobApplicationList = query.list();
+        transaction.commit();
+        session.close();
+        return jobApplicationList;
     }
 
-    public void deleteJobApplication(int jobId, int memberId) throws SQLException,NamingException{
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql ="update jobapplication SET Status=? where JobId=? and MemberId=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,Status.INACTIVE.name());
-        preparedStatement.setInt(2,jobId);
-        preparedStatement.setInt(3,memberId);
-        preparedStatement.executeUpdate();
-
-        preparedStatement.close();
-        connection.close();
+    public void deleteJobApplication(int jobId , int memberId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update JobApplication SET status=? where jobId=? and memberId=?";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,Status.INACTIVE);
+        query.setInteger(1,jobId);
+        query.setInteger(2,memberId);
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
     }
-
-//    public List<JobApplicationForm> getJobApplicationsByJobId(int jobId) throws SQLException,NamingException{
-//        List<JobApplicationForm> jobApplicationDTOList = new ArrayList<JobApplicationForm>();
-//        Connection connection = JNDIHelper.getJNDIConnection();
-//        String sql = "select ja.Id , ja.JobId , ja.MemberId ,j.Title,m.FirstName,m.LastName,ja.ExpectedPay,ja.Status " +
-//                "from jobapplication as ja,member as m,job as j " +
-//                "where ja.JobId = j.Id and ja.MemberId = m.Id and ja.JobId=? and ja.Status=?";
-//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        preparedStatement.setInt(1,jobId);
-//        preparedStatement.setString(2,Status.ACTIVE.name());
-//        ResultSet resultSet = preparedStatement.executeQuery();
-//        while(true){
-//            boolean contains = resultSet.next();
-//            if(contains){
-//                JobApplicationForm jobApplicationDTO = new JobApplicationForm();
-//                jobApplicationDTO.setJobApplicationId(resultSet.getInt("Id"));
-//                jobApplicationDTO.setJobId(resultSet.getInt("JobId"));
-//                jobApplicationDTO.setMemberId(resultSet.getInt("MemberId"));
-//                jobApplicationDTO.setJobTitle(resultSet.getString("Title"));
-//                jobApplicationDTO.setExpectedPay(resultSet.getDouble("ExpectedPay"));
-//                jobApplicationDTO.setSitterFirstName(resultSet.getString("FirstName"));
-//                jobApplicationDTO.setSitterLastName(resultSet.getString("LastName"));
-//                jobApplicationDTO.setStatus(Status.valueOf(resultSet.getString("Status")));
-//                jobApplicationDTOList.add(jobApplicationDTO);
-//            }else{
-//                break;
-//            }
-//        }
-//        preparedStatement.close();
-//        connection.close();
-//        return jobApplicationDTOList;
-//    }
 
     public List<JobApplicationForm> getJobApplicationsByJobId(int jobId){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        String hql = "select ja.id , ja.jobId , ja.memberId ,j.jobTitle,m.firstName,m.lastName,ja.expectedPay,ja.status " +
-                "from JobApplication as ja,Member as m,Job as j " +
-                "where ja.jobId = j.id and ja.memberId = m.id and ja.jobId=? and ja.status=?";
+        String hql = "from JobApplication where status=? and jobId=?";
         Query query = session.createQuery(hql);
         query.setInteger(0,jobId);
         query.setParameter(1,Status.ACTIVE);
         List<JobApplicationForm> jobApplicationFormList = query.list();
-        transaction.commit();
         session.close();
         return jobApplicationFormList;
     }
 
-    public JobApplicationForm getJobApplication(int jobId, int memberId) throws SQLException,NamingException{
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql = "select * from jobapplication where JobId=? and MemberId=? and status=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1,jobId);
-        preparedStatement.setInt(2,memberId);
-        preparedStatement.setString(3,Status.ACTIVE.name());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        JobApplicationForm jobApplicationForm = null;
-        boolean contains = resultSet.next();
-            if(contains) {
-                jobApplicationForm = new JobApplicationForm();
-                jobApplicationForm.setJobApplicationId(resultSet.getInt("Id"));
-                jobApplicationForm.setJobId(resultSet.getInt("JobId"));
-                jobApplicationForm.setMemberId(resultSet.getInt("MemberId"));
-            }
-        return jobApplicationForm;
+    public JobApplication getJobApplication(int jobId , int memberId){
+        JobApplication jobApplication = null ;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "from JobApplication where jobId=? and memberId=? and status=?";
+        Query query = session.createQuery(hql);
+        query.setInteger(0,jobId);
+        query.setInteger(1,memberId);
+        query.setParameter(2,Status.ACTIVE);
+        List<JobApplication> jobApplicationList = query.list();
+        if(jobApplicationList.size()>0){
+            jobApplication = jobApplicationList.get(0);
+        }
+        transaction.commit();
+        session.close();
+        return jobApplication;
     }
 
-    public void closeJobApplicationByJobId(int jobId) throws SQLException,NamingException{
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql ="update jobapplication SET Status=? where JobId=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,Status.INACTIVE.name());
-        preparedStatement.setInt(2,jobId);
-        preparedStatement.executeUpdate();
-
-        preparedStatement.close();
-        connection.close();
+    public void closeJobApplicationByJobId(int jobId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update JobApplication SET status=? where jobId = ?";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,Status.INACTIVE);
+        query.setInteger(1,jobId);
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
     }
 
-    public void closeJobApplicationsByMemberId(int memberId) throws NamingException,SQLException{
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql = "update jobapplication SET Status=? where MemberId=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,Status.INACTIVE.name());
-        preparedStatement.setInt(2,memberId);
-        preparedStatement.executeUpdate();
+//    public void closeJobApplicationsByMemberId(int memberId) throws NamingException,SQLException{
+//        Connection connection = JNDIHelper.getJNDIConnection();
+//        String sql = "update jobapplication SET Status=? where MemberId=?";
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.setString(1,Status.INACTIVE.name());
+//        preparedStatement.setInt(2,memberId);
+//        preparedStatement.executeUpdate();
+//
+//        preparedStatement.close();
+//        connection.close();
+//    }
 
-        preparedStatement.close();
-        connection.close();
+    public void closeJobApplicationsByMemberId(int memberId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update JobApplication SET status=? where memberId=?";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,Status.INACTIVE);
+        query.setInteger(1,memberId);
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
     }
 
-    public void deleteJobApplicationByJobId(int memberId) throws NamingException,SQLException{
-        Connection connection = JNDIHelper.getJNDIConnection();
-        String sql = "update jobapplication SET Status=? where jobapplication.JobId IN(select job.Id " +
-                "from job where PostedBy=?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1,Status.INACTIVE.name());
-        preparedStatement.setInt(2,memberId);
-        preparedStatement.executeUpdate();
-
-        preparedStatement.close();
-        connection.close();
-
+    public void deleteJobApplicationByJobId(int memberId){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        String hql = "update JobApplication SET status=? where jobId IN(" +
+                "select j.id from Job as j where postedBy=?)";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,Status.INACTIVE);
+        query.setInteger(1,memberId);
+        query.executeUpdate();
+        transaction.commit();
+        session.close();
     }
 }

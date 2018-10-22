@@ -3,6 +3,7 @@ package com.minicare.controller.sitter;
 import com.minicare.dto.DeleteJobApplicationForm;
 import com.minicare.exception.MiniCareException;
 import com.minicare.dto.JobApplicationForm;
+import com.minicare.model.JobApplication;
 import com.minicare.model.Member;
 import com.minicare.service.JobApplicationService;
 import org.apache.struts.action.Action;
@@ -26,8 +27,8 @@ public class DeleteJobApplication extends Action {
             Member member = (Member) req.getSession().getAttribute("CurrentUser");
             JobApplicationService jobApplicationService = JobApplicationService.getInstance();
             jobApplicationService.deleteJobApplication(jobId, member.getMemberId());
-            List<JobApplicationForm> jobApplicationFormList = jobApplicationService.getJobApplicationList(req);
-            req.setAttribute("MyJobApplicationList", jobApplicationFormList);
+            List<JobApplication> jobApplicationList = jobApplicationService.getJobApplicationList(req);
+            req.setAttribute("MyJobApplicationList", jobApplicationList);
             return mapping.findForward("listmyjobapplications");
         }catch (Exception e){
             Logger logger = Logger.getLogger("DeleteJobApplication");

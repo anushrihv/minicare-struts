@@ -2,7 +2,10 @@ package com.minicare.controller.sitter;
 
 import com.minicare.dto.JobApplicationForm;
 import com.minicare.exception.MiniCareException;
+import com.minicare.model.Job;
+import com.minicare.model.JobApplication;
 import com.minicare.service.JobApplicationService;
+import com.minicare.service.JobService;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -20,8 +23,9 @@ public class ListJobApplication extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest req, HttpServletResponse resp) throws Exception {
         try {
             JobApplicationService jobApplicationService = JobApplicationService.getInstance();
-            List<JobApplicationForm> jobApplicationFormList = jobApplicationService.getJobApplicationList(req);
-            req.setAttribute("MyJobApplicationList", jobApplicationFormList);
+            JobService jobService = JobService.getInstance();
+            List<JobApplication> jobApplicationList = jobApplicationService.getJobApplicationList(req);
+            req.setAttribute("MyJobApplicationList", jobApplicationList);
             return mapping.findForward("listmyjobapplications");
         }catch (Exception e){
             Logger logger = Logger.getLogger("ListJobApplication");

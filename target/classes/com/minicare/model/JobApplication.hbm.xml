@@ -8,14 +8,16 @@
         <id name="id" column="Id" >
             <generator class="increment" />
         </id>
-        <property name="jobId" column="JobId" />
+
         <property name="memberId" column="MemberId" />
         <property name="expectedPay" column="ExpectedPay" />
         <property name="status" column="Status" >
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">com.minicare.model.Status</param>
                 <param name="useNamed">true</param>
+                <param name="type">12</param>
             </type>
         </property>
+        <many-to-one name="job" column="JobId" class="com.minicare.model.Job" fetch="join" lazy="false"/>
     </class>
 </hibernate-mapping>

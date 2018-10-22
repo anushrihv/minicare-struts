@@ -16,9 +16,7 @@ public class EditAccountAction extends Action {
         HttpSession session = req.getSession(false);
         Member member = (Member) session.getAttribute("CurrentUser");
         SitterService sitterService = SitterService.getInstance();
-        Sitter sitterModel = sitterService.getSitter(member.getMemberId());
-        req.setAttribute("Sitter",sitterModel);
-        sitterModel = sitterService.editSitterAccount(sitterForm);
+        Sitter sitterModel = sitterService.editSitterAccount(sitterForm);
         session.setAttribute("CurrentUser",sitterModel);
         ActionMessages actionMessages = new ActionMessages();
         actionMessages.add("HomePageMessage",new ActionMessage("message.edit.success"));

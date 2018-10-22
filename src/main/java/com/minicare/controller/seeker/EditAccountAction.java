@@ -18,10 +18,7 @@ public class EditAccountAction extends Action {
         HttpSession session = request.getSession(false);
         Member member = (Member) session.getAttribute("CurrentUser");
         SeekerService seekerService = SeekerService.getInstance();
-        Seeker seekerModel = seekerService.getSeeker(member.getMemberId());
-
-        request.setAttribute("Seeker",seekerModel);
-        seekerModel = seekerService.editSeekerAccount(seekerForm);
+        Seeker seekerModel = seekerService.editSeekerAccount(seekerForm);
         session.setAttribute("CurrentUser",seekerModel);
         ActionMessages actionMessages = new ActionMessages();
         actionMessages.add("HomePageMessage",new ActionMessage("message.edit.success"));
