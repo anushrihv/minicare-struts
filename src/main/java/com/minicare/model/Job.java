@@ -2,6 +2,8 @@ package com.minicare.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Job implements Serializable {
     int id;
@@ -11,9 +13,18 @@ public class Job implements Serializable {
     Timestamp endDateTime;
     double payPerHour;
     Status status;
+    Set jobapplication = new HashSet();
 
     public Job(){
 
+    }
+
+    public Set getJobapplication() {
+        return jobapplication;
+    }
+
+    public void setJobapplication(Set jobapplication) {
+        this.jobapplication = jobapplication;
     }
 
     public int getId() {

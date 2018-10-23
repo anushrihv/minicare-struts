@@ -2,22 +2,15 @@ package com.minicare.dao;
 
 import com.minicare.model.Job;
 import com.minicare.model.Member;
-import com.minicare.model.Seeker;
 import com.minicare.model.Status;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class JobDao {
     static JobDao jobDao;
-    PreparedStatement preparedStatement;
 
     static{
         jobDao = new JobDao();
@@ -49,7 +42,6 @@ public class JobDao {
         query.setParameter(0,Status.ACTIVE);
         query.setInteger(1,member.getMemberId());
         List<Job> jobList = query.list();
-        transaction.commit();
         session.close();
         return jobList;
     }
@@ -61,7 +53,6 @@ public class JobDao {
         Query query = session.createQuery(hql);
         query.setParameter(0,Status.ACTIVE);
         List<Job> jobList = query.list();
-        transaction.commit();
         session.close();
         return jobList;
     }
@@ -81,16 +72,6 @@ public class JobDao {
         session.close();
         return job;
     }
-
-//    public void closeJob(int jobId) throws ClassNotFoundException,SQLException{
-//        Connection connection = JDBCHelper.getConnection();
-//        String sql ="update job SET Status=? where Id=?";
-//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        preparedStatement.setString(1,Status.INACTIVE.name());
-//        preparedStatement.setInt(2,jobId);
-//        preparedStatement.executeUpdate();
-//        connection.close();
-//    }
 
     public void closeJob(int jobId){
         Session session = HibernateUtil.getSessionFactory().openSession();

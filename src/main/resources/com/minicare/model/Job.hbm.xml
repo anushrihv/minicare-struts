@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.minicare.model.Job" table="job">
+    <class name="com.minicare.model.Job" table="job" >
         <id name="id" column="Id" >
             <generator class="increment" />
         </id>
@@ -19,5 +19,9 @@
                 <param name="useNamed">true</param>
             </type>
         </property>
+        <set name="jobapplication" table="jobapplication" inverse="true" lazy="false" fetch="join">
+            <key column="JobId" />
+            <one-to-many class="com.minicare.model.JobApplication" />
+        </set>
     </class>
 </hibernate-mapping>

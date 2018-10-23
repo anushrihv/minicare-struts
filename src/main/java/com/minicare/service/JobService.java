@@ -29,7 +29,7 @@ public class JobService {
         return jobService;
     }
 
-    public void storeJob(HttpServletRequest request,JobForm jobForm) throws ClassNotFoundException, SQLException {
+    public void storeJob(HttpServletRequest request,JobForm jobForm){
         JobUtil jobUtil = JobUtil.getInstance();
         Member member = (Member) request.getSession(false).getAttribute("CurrentUser");
         Job job = jobUtil.populateJobModel(jobForm);
@@ -37,7 +37,7 @@ public class JobService {
         jobDao.storeJob(job, member);
     }
 
-    public List<Job> closeJob(int jobId, Member member) throws SQLException,ClassNotFoundException,NamingException {
+    public List<Job> closeJob(int jobId, Member member)  {
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
         JobDao jobDao = JobDao.getInstance();
 
@@ -47,13 +47,13 @@ public class JobService {
         return jobList;
     }
 
-    public Job getJobByJobId(int jobId) throws SQLException,ClassNotFoundException{
+    public Job getJobByJobId(int jobId) {
         JobDao jobDao = JobDao.getInstance();
         Job job = jobDao.getJobByJobId(jobId);
         return job;
     }
 
-    public void updateJob(JobForm jobForm) throws ClassNotFoundException, SQLException {
+    public void updateJob(JobForm jobForm) {
         Job job = new Job();
         JobDao jobDao = JobDao.getInstance();
 
@@ -80,12 +80,12 @@ public class JobService {
         return jobList;
     }
 
-    public void deleteJobsBySeeker(int seekerId) throws ClassNotFoundException,SQLException{
+    public void deleteJobsBySeeker(int seekerId){
         JobDao jobDao = JobDao.getInstance();
         jobDao.closeJobByMemberId(seekerId);
     }
 
-    public List<Job> getJobsById(Member member) throws ClassNotFoundException,SQLException{
+    public List<Job> getJobsById(Member member){
         JobDao jobDao = JobDao.getInstance();
 
         return jobDao.getJobsById(member);

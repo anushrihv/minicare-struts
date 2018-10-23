@@ -70,8 +70,8 @@ public class JobApplicationDao {
         Transaction transaction = session.beginTransaction();
         String hql = "from JobApplication where status=? and jobId=?";
         Query query = session.createQuery(hql);
-        query.setInteger(0,jobId);
-        query.setParameter(1,Status.ACTIVE);
+        query.setParameter(0,Status.ACTIVE);
+        query.setInteger(1,jobId);
         List<JobApplicationForm> jobApplicationFormList = query.list();
         session.close();
         return jobApplicationFormList;

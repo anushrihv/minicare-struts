@@ -9,7 +9,6 @@
             <generator class="increment" />
         </id>
 
-        <property name="memberId" column="MemberId" />
         <property name="expectedPay" column="ExpectedPay" />
         <property name="status" column="Status" >
             <type name="org.hibernate.type.EnumType">
@@ -19,5 +18,6 @@
             </type>
         </property>
         <many-to-one name="job" column="JobId" class="com.minicare.model.Job" fetch="join" lazy="false"/>
+        <many-to-one name="sitter" column="MemberId" class="com.minicare.model.Sitter" fetch="join" lazy="false" />
     </class>
 </hibernate-mapping>

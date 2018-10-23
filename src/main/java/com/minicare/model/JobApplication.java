@@ -9,9 +9,18 @@ public class JobApplication implements Serializable {
     double expectedPay;
     Status status;
     Job job;
+    Sitter sitter;
 
     public JobApplication(){
 
+    }
+
+    public Sitter getSitter() {
+        return sitter;
+    }
+
+    public void setSitter(Sitter sitter) {
+        this.sitter = sitter;
     }
 
     public Job getJob() {

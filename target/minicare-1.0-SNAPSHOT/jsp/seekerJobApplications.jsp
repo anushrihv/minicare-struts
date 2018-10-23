@@ -45,12 +45,12 @@ text-align:center
                 <th> LAST NAME </th>
                 <th> EXPECTED PAY </th>
             </tr>
-            <c:forEach items="${JobApplicationList}" var="Job">
+            <c:forEach items="${JobApplicationList}" var="JobApplication">
             <tr>
-               <td><c:out value="${Job.jobTitle}" /></td>
-               <td><c:out value="${Job.sitterFirstName}" /></td>
-               <td><c:out value="${Job.sitterLastName}" /></td>
-               <td><c:out value="${Job.expectedPay}" /></td>
+               <td><c:out value="${JobApplication.job.jobTitle}" /></td>
+               <td><c:out value="${JobApplication.sitter.firstName}" /></td>
+               <td><c:out value="${JobApplication.sitter.lastName}" /></td>
+               <td><c:out value="${JobApplication.expectedPay}" /></td>
             </tr>
             </c:forEach>
         </table>
