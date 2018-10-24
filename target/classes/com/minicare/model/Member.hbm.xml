@@ -31,12 +31,24 @@
             <key column="MemberId" />
             <property name="yearsOfExperience" column="YearsOfExperience" />
             <property name="expectedPay" column="ExpectedPay" />
+            <property name="status" column="Status" >
+                <type name="org.hibernate.type.EnumType">
+                    <param name="enumClass">com.minicare.model.Status</param>
+                    <param name="useNamed">true</param>
+                </type>
+            </property>
         </joined-subclass>
 
         <joined-subclass name="com.minicare.model.Seeker" table="seeker">
             <key column="MemberId" />
             <property name="numberOfChildren" column="NumberOfChildren" />
             <property name="spouseName" column="SpouseName" />
+            <property name="status" column="Status" >
+                <type name="org.hibernate.type.EnumType">
+                    <param name="enumClass">com.minicare.model.Status</param>
+                    <param name="useNamed">true</param>
+                </type>
+            </property>
         </joined-subclass>
     </class>
 

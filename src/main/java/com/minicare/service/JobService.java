@@ -5,7 +5,9 @@ import com.minicare.dao.JobApplicationDao;
 import com.minicare.dao.JobDao;
 import com.minicare.dto.JobForm;
 import com.minicare.model.Job;
+import com.minicare.model.JobApplication;
 import com.minicare.model.Member;
+import com.minicare.model.Status;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class JobService {
     private static JobService jobService;
@@ -38,11 +41,15 @@ public class JobService {
     }
 
     public List<Job> closeJob(int jobId, Member member)  {
-        JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
         JobDao jobDao = JobDao.getInstance();
-
-        jobApplicationDao.closeJobApplicationByJobId(jobId);
-        jobDao.closeJob(jobId);
+        Job job = jobDao.getJobByJobId(jobId);
+        job.setStatus(Status.INACTIVE);
+        Set<JobApplication> jobApplicationSet = job.getJobapplication();
+        for(JobApplication jobApplication : jobApplicationSet){
+            jobApplication.setStatus(Status.INACTIVE);
+        }
+        //jobApplicationDao.closeJobApplicationByJobId(jobId);
+        jobDao.closeJob(job);
         List<Job> jobList = jobDao.getJobsById(member);
         return jobList;
     }

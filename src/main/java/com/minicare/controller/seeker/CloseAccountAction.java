@@ -24,7 +24,7 @@ public class CloseAccountAction extends Action {
 
             jobService.deleteJobsBySeeker(member.getMemberId());
             jobApplicationService.deleteJobApplicationsByJobId(member.getMemberId());
-            seekerService.closeSeekerAccount(member.getMemberId());
+            seekerService.closeSeekerAccount(member);
             req.getSession().invalidate();
             ActionMessages actionMessages = new ActionMessages();
             actionMessages.add("Message", new ActionMessage("message.account.close"));

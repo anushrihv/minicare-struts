@@ -53,11 +53,10 @@ public class VisitorService{
     }
 
     public void storeSeekerDetails(SeekerForm seekerForm,HttpSession session) throws SQLException,ClassNotFoundException {
-        boolean isRegister = true ;
         VisitorUtil visitorUtil = VisitorUtil.getInstance();
         SeekerUtil seekerUtil = SeekerUtil.getInstance();
 
-        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm,isRegister);
+        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm,true);
         seekerDao = SeekerDao.getInstance();
         seekerDao.insertSeeker(seekerModel);
         visitorUtil.populateModelFromDb(seekerModel.getEmail(),session);

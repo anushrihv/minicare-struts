@@ -46,34 +46,4 @@ public class ResetPassword extends Action {
             throw  new MiniCareException(e);
         }
     }
-
-//    private void action(HttpServletRequest req, HttpServletResponse resp) {
-//        try{
-//            String url = String.valueOf(req.getRequestURL());
-//            if(url.contains("/resetpasswordform.do"))
-//                getServletContext().getRequestDispatcher("/jsp/resetPassword.jsp").forward(req,resp);
-//            else{
-//                MemberService memberService = MemberService.getInstance();
-//                Member memberModel = (Member) req.getSession(false).getAttribute("CurrentUser");
-//                if(!memberService.checkPassword(req)){
-//                    getServletContext().getRequestDispatcher("/jsp/resetPassword.jsp").forward(req,resp);
-//                }else{
-//                    memberService.updatePassword(memberModel.getMemberId(),req.getParameter("newpassword"));
-//                    String newPasswordHash = PasswordHashHelper.get_SHA_256_SecurePassword(req.getParameter("newpassword"));
-//                    memberModel.setPassword(newPasswordHash);
-//                    req.getSession().setAttribute("CurrentUser",memberModel);
-//                    req.setAttribute("HomePageMessage","Password successfully updated");
-//                    if(memberModel.getType().name().equals(Type.SITTER.name())){
-//                        getServletContext().getRequestDispatcher("/jsp/sitter_homepage.jsp").forward(req,resp);
-//                    }else{
-//                        getServletContext().getRequestDispatcher("/jsp/seeker_homepage.jsp").forward(req,resp);
-//                    }
-//                }
-//            }
-//        }catch (Exception e){
-//            Logger logger = Logger.getLogger("ResetPassword");
-//            logger.log(Level.SEVERE,"exception occurred",e);
-//            throw  new MiniCareException(e);
-//        }
-//    }
 }

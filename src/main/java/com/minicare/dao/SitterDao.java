@@ -40,29 +40,22 @@ public class SitterDao{
     }
 
 
-    public void deleteSitter(int memberId){
+    public void deleteSitter(Member member){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        String hql = "update Sitter SET status=? where memberId=?";
-        Query query = session.createQuery(hql);
-        query.setParameter(0,Status.INACTIVE);
-        query.setInteger(1,memberId);
-        query.executeUpdate();
+        session.saveOrUpdate(member);
         transaction.commit();
         session.close();
     }
 
     public Sitter getSitter(int sitterId){
-        Sitter sitter = null;
+        Sitter sitter ;
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         String hql = "from Sitter where memberId = ?";
         Query query = session.createQuery(hql);
         query.setInteger(0,sitterId);
-        List<Sitter> sitterList = query.list();
-        if(sitterList.size()>0)
-            sitter = (Sitter) sitterList.get(0);
-        transaction.commit();
+        sitter = (Sitter) query.uniqueResult();
         session.close();
         return sitter;
     }
@@ -70,12 +63,7 @@ public class SitterDao{
     public void editSitter(Sitter sitter){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        String hql = "update Sitter SET yearsOfExperience=? , expectedPay=? where memberId=?";
-        Query query = session.createQuery(hql);
-        query.setInteger(0,sitter.getYearsOfExperience());
-        query.setDouble(1,sitter.getExpectedPay());
-        query.setInteger(2,sitter.getMemberId());
-        query.executeUpdate();
+        session.saveOrUpdate(sitter);
         transaction.commit();
         session.close();
     }

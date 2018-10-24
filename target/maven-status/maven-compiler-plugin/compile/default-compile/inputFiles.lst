@@ -36,7 +36,6 @@ C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\See
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\EditJobAction.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dao\HibernateUtil.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\ListJob.java
-C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dao\JDBCHelper.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\ApplyJobForm.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\LoginForm.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\member\ResetPassword.java
@@ -61,6 +60,5 @@ C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\control
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\DeleteJobApplicationForm.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\EditAccountAction.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\SitterForm.java
-C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dao\JNDIHelper.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\service\JobService.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\SeekerHomePage.java

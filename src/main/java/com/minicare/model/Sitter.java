@@ -10,6 +10,7 @@ public class Sitter extends Member implements Serializable {
 
     }
 
+
     public int getYearsOfExperience() {
         return yearsOfExperience;
     }

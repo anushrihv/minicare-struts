@@ -30,7 +30,9 @@ public class SitterUtil {
         long phoneNumber = Long.parseLong(sitterForm.getPhonenumber());
         int yearsOfExperience = Integer.parseInt(sitterForm.getYearsOfExperience());
         double expectedPay = Double.parseDouble(sitterForm.getExpectedPay());
-        //String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword());
+        String passwordHash = sitterForm.getPassword();
+        if(isRegister)
+            passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword());
 
         if(!isRegister)
             sitterModel.setMemberId(Integer.parseInt(sitterForm.getMemberId()));
@@ -40,7 +42,7 @@ public class SitterUtil {
         sitterModel.setEmail(sitterForm.getEmail());
         sitterModel.setType(Type.SITTER);
         sitterModel.setAddress(sitterForm.getAddress());
-        sitterModel.setPassword(sitterForm.getPassword());
+        sitterModel.setPassword(passwordHash);
         sitterModel.setYearsOfExperience(yearsOfExperience);
         sitterModel.setExpectedPay(expectedPay);
 
@@ -51,19 +53,17 @@ public class SitterUtil {
 
     public void populateSitterFormBeanBySitterModel(Member member, SitterForm sitterForm) throws ClassNotFoundException, SQLException {
         SitterService sitterService = SitterService.getInstance();
+        Sitter sitter = sitterService.getSitter(member.getMemberId());
 
-        sitterForm.setMemberId(String.valueOf(member.getMemberId()));
-        sitterForm.setType(member.getType().name());
-        sitterForm.setFirstname(member.getFirstName());
-        sitterForm.setLastname(member.getLastName());
-        sitterForm.setPhonenumber(String.valueOf(member.getPhoneNumber()));
-        sitterForm.setEmail(member.getEmail());
-        sitterForm.setAddress(member.getAddress());
-        sitterForm.setPassword(member.getPassword());
-
-        Sitter sitterModel = sitterService.getSitter(member.getMemberId());
-
-        sitterForm.setYearsOfExperience(String.valueOf(sitterModel.getYearsOfExperience()));
-        sitterForm.setExpectedPay(String.valueOf(sitterModel.getExpectedPay()));
+        sitterForm.setMemberId(String.valueOf(sitter.getMemberId()));
+        sitterForm.setType(sitter.getType().name());
+        sitterForm.setFirstname(sitter.getFirstName());
+        sitterForm.setLastname(sitter.getLastName());
+        sitterForm.setPhonenumber(String.valueOf(sitter.getPhoneNumber()));
+        sitterForm.setEmail(sitter.getEmail());
+        sitterForm.setAddress(sitter.getAddress());
+        sitterForm.setPassword(sitter.getPassword());
+        sitterForm.setYearsOfExperience(String.valueOf(sitter.getYearsOfExperience()));
+        sitterForm.setExpectedPay(String.valueOf(sitter.getExpectedPay()));
     }
 }

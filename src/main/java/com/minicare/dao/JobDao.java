@@ -73,14 +73,15 @@ public class JobDao {
         return job;
     }
 
-    public void closeJob(int jobId){
+    public void closeJob(Job job){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        String hql = "update Job SET status=? where id=?";
-        Query query = session.createQuery(hql);
-        query.setParameter(0,Status.INACTIVE);
-        query.setInteger(1,jobId);
-        query.executeUpdate();
+//        String hql = "update Job SET status=? where id=?";
+//        Query query = session.createQuery(hql);
+//        query.setParameter(0,Status.INACTIVE);
+//        query.setInteger(1,jobId);
+//        query.executeUpdate();
+        session.update(job);
         transaction.commit();
         session.close();
     }

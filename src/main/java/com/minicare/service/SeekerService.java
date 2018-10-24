@@ -8,6 +8,7 @@ import com.minicare.dto.SeekerForm;
 import com.minicare.model.Job;
 import com.minicare.model.Member;
 import com.minicare.model.Seeker;
+import com.minicare.model.Status;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,9 +40,13 @@ public class SeekerService {
         return jobList;
     }
 
-    public void closeSeekerAccount(int seekerId) {
+    public void closeSeekerAccount(Member member) {
         MemberDao memberDao = MemberDao.getInstance();
-        memberDao.deleteMember(seekerId);
+        SeekerDao seekerDao = SeekerDao.getInstance();
+
+        member.setStatus(Status.INACTIVE);
+        //memberDao.deleteMember(member);
+        seekerDao.deleteSeeker(member);
     }
 
     public Seeker getSeeker(int seekerId){
@@ -51,14 +56,11 @@ public class SeekerService {
 
 
     public Seeker editSeekerAccount(SeekerForm seekerForm) {
-        boolean isRegister = false;
         SeekerUtil seekerUtil = SeekerUtil.getInstance();
         SeekerDao seekerDao = SeekerDao.getInstance();
-        MemberDao memberDao = MemberDao.getInstance();
 
-        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm,isRegister);
+        Seeker seekerModel = seekerUtil.populateSeekerModel(seekerForm,false);
         seekerDao.editSeeker(seekerModel);
-        memberDao.editMember(seekerModel);
         return seekerModel;
     }
 }

@@ -7,9 +7,6 @@ import com.minicare.model.Seeker;
 import com.minicare.model.Type;
 import com.minicare.service.SeekerService;
 
-import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
-
 public class SeekerUtil {
     public static SeekerUtil seekerUtil;
 
@@ -27,20 +24,17 @@ public class SeekerUtil {
 
 
     public Seeker populateSeekerModel(SeekerForm seekerForm , boolean isRegister) {
-        //SeekerForm seekerForm = populateSeekerFormBean(req);
-        //SeekerForm seekerForm = (SeekerForm) req.getAttribute("SeekerForm");
         Seeker seekerModel = new Seeker();
-        int numberOfChildren;
-
-        long phoneNumber = Long.parseLong(seekerForm.getPhonenumber());
-
-        //String passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(seekerForm.getPassword());
-        try {
+        int numberOfChildren ;
+        try{
             numberOfChildren = Integer.parseInt(seekerForm.getNumberOfChildren());
-        }catch(NumberFormatException e){
+        }catch (Exception e){
             numberOfChildren = 0;
         }
-
+        long phoneNumber = Long.parseLong(seekerForm.getPhonenumber());
+        String passwordHash = seekerForm.getPassword();
+        if(isRegister)
+            passwordHash = PasswordHashHelper.get_SHA_256_SecurePassword(seekerForm.getPassword());
 
         if(!isRegister)
             seekerModel.setMemberId(Integer.parseInt(seekerForm.getMemberId()));
@@ -50,31 +44,28 @@ public class SeekerUtil {
         seekerModel.setEmail(seekerForm.getEmail());
         seekerModel.setType(Type.SEEKER);
         seekerModel.setAddress(seekerForm.getAddress());
-        seekerModel.setPassword(seekerForm.getPassword());
+        seekerModel.setPassword(passwordHash);
         seekerModel.setNumberOfChildren(numberOfChildren);
         seekerModel.setSpouseName(seekerForm.getSpouseName());
 
-        //req.setAttribute("Seeker",seekerModel);
         return seekerModel;
     }
 
 
-    public void populateSeekerFormBeanBySeekerModel(Member member, SeekerForm seekerForm) throws ClassNotFoundException, SQLException {
+    public void populateSeekerFormBeanBySeekerModel(Member member, SeekerForm seekerForm) {
         SeekerService seekerService = SeekerService.getInstance();
+        Seeker seeker = seekerService.getSeeker(member.getMemberId());
 
-        seekerForm.setMemberId(String.valueOf(member.getMemberId()));
-        seekerForm.setFirstname(member.getFirstName());
-        seekerForm.setLastname(member.getLastName());
-        seekerForm.setPhonenumber(String.valueOf(member.getPhoneNumber()));
-        seekerForm.setEmail(member.getEmail());
-        seekerForm.setAddress(member.getAddress());
-        seekerForm.setPassword(member.getPassword());
+        seekerForm.setMemberId(String.valueOf(seeker.getMemberId()));
+        seekerForm.setFirstname(seeker.getFirstName());
+        seekerForm.setLastname(seeker.getLastName());
+        seekerForm.setPhonenumber(String.valueOf(seeker.getPhoneNumber()));
+        seekerForm.setEmail(seeker.getEmail());
+        seekerForm.setAddress(seeker.getAddress());
+        seekerForm.setPassword(seeker.getPassword());
         seekerForm.setType(Type.SEEKER.name());
-
-        Seeker seekerModel = seekerService.getSeeker(member.getMemberId());
-
-        seekerForm.setSpouseName(seekerModel.getSpouseName());
-        seekerForm.setNumberOfChildren(String.valueOf(seekerModel.getNumberOfChildren()));
+        seekerForm.setSpouseName(seeker.getSpouseName());
+        seekerForm.setNumberOfChildren(String.valueOf(seeker.getNumberOfChildren()));
     }
 
 }

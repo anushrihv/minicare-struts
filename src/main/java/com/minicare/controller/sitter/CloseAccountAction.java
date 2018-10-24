@@ -21,7 +21,7 @@ public class CloseAccountAction extends Action {
             Member member = (Member) req.getSession().getAttribute("CurrentUser");
 
             jobApplicationService.closeSitterJobApplications(member.getMemberId());
-            sitterService.closeSitterAccount(member.getMemberId());
+            sitterService.closeSitterAccount(member);
             req.getSession(false).invalidate();
             ActionMessages actionMessages = new ActionMessages();
             actionMessages.add("Message", new ActionMessage("message.account.close"));

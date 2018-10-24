@@ -33,7 +33,6 @@ com\minicare\controller\seeker\CloseJob.class
 com\minicare\controller\seeker\JobUtil.class
 com\minicare\controller\seeker\EditAccountFormAction.class
 com\minicare\dto\JobApplicationForm.class
-com\minicare\dao\JDBCHelper.class
 com\minicare\controller\seeker\EditJobAction.class
 com\minicare\service\JobApplicationService.class
 com\minicare\model\Type.class
@@ -43,7 +42,6 @@ com\minicare\dto\LoginForm.class
 com\minicare\controller\seeker\PostJobAction.class
 com\minicare\service\SeekerService.class
 com\minicare\dto\SitterForm.class
-com\minicare\dao\JNDIHelper.class
 com\minicare\model\JobApplication.class
 com\minicare\controller\seeker\CloseAccountAction.class
 com\minicare\service\SitterService.class

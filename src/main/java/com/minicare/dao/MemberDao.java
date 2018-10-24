@@ -36,25 +36,25 @@ public class MemberDao {
     public List<Member> getMember(String email){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        String hql ="FROM com.minicare.model.Member where email = :email_id and status= :active_status" ;
+        String hql ="FROM Member where email = ? and status= ?" ;
         Query query = session.createQuery(hql) ;
-        query.setParameter("email_id",email);
-        query.setParameter("active_status",Status.ACTIVE);
+        query.setParameter(0,email);
+        query.setParameter(1,Status.ACTIVE);
         List result = query.list();
-        transaction.commit();
         session.close();
         return result;
     }
 
 
-    public void deleteMember(int memberId){
+    public void deleteMember(Member member){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        String hql = "update Member SET status=? where id=?";
-        Query query = session.createQuery(hql);
-        query.setParameter(0,Status.INACTIVE);
-        query.setInteger(1,memberId);
-        query.executeUpdate();
+//        String hql = "update Member SET status=? where id=?";
+//        Query query = session.createQuery(hql);
+//        query.setParameter(0,Status.INACTIVE);
+//        query.setInteger(1,memberId);
+//        query.executeUpdate();
+        session.saveOrUpdate(member);
         transaction.commit();
         session.close();
     }
@@ -63,15 +63,16 @@ public class MemberDao {
     public void editMember(Member member){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        String hql = "update Member SET firstName = ? , lastName = ? ,phoneNumber = ?," +
-                "address= ? where memberId = ?";
-        Query query = session.createQuery(hql);
-        query.setString(0,member.getFirstName());
-        query.setString(1,member.getLastName());
-        query.setLong(2,member.getPhoneNumber());
-        query.setString(3,member.getAddress());
-        query.setInteger(4,member.getMemberId());
-        query.executeUpdate();
+//        String hql = "update Member SET firstName = ? , lastName = ? ,phoneNumber = ?," +
+//                "address= ? where memberId = ?";
+//        Query query = session.createQuery(hql);
+//        query.setString(0,member.getFirstName());
+//        query.setString(1,member.getLastName());
+//        query.setLong(2,member.getPhoneNumber());
+//        query.setString(3,member.getAddress());
+//        query.setInteger(4,member.getMemberId());
+//        query.executeUpdate();
+        session.saveOrUpdate(member);
         transaction.commit();
         session.close();
 

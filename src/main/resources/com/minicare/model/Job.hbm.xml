@@ -19,7 +19,7 @@
                 <param name="useNamed">true</param>
             </type>
         </property>
-        <set name="jobapplication" table="jobapplication" inverse="true" lazy="false" fetch="join">
+        <set name="jobapplication" table="jobapplication" inverse="true" lazy="false" fetch="join" cascade="save-update">
             <key column="JobId" />
             <one-to-many class="com.minicare.model.JobApplication" />
         </set>

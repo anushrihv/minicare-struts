@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 public class JobApplication implements Serializable {
     int id;
-    int jobId;
-    int memberId;
     double expectedPay;
     Status status;
     Job job;
@@ -39,21 +37,21 @@ public class JobApplication implements Serializable {
         this.id = id;
     }
 
-    public int getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
-
-    public int getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
-    }
+//    public int getJobId() {
+//        return jobId;
+//    }
+//
+//    public void setJobId(int jobId) {
+//        this.jobId = jobId;
+//    }
+//
+//    public int getMemberId() {
+//        return memberId;
+//    }
+//
+//    public void setMemberId(int memberId) {
+//        this.memberId = memberId;
+//    }
 
     public double getExpectedPay() {
         return expectedPay;
