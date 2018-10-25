@@ -21,6 +21,7 @@ public class RegisterAction extends Action {
 
         if(!memberService.uniqueEmail(seekerForm.getEmail())){
             actionErrors.add("EmailError",new ActionMessage("error.email.exists"));
+            saveErrors(request,actionErrors);
             return mapping.findForward("SeekerRegister");
         } else {
             HttpSession session = request.getSession();

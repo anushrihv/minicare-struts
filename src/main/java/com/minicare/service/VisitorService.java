@@ -19,15 +19,9 @@ import java.util.Set;
 
 public class VisitorService{
     private static VisitorService visitorService;
-    private SeekerForm seekerForm;
-    private SitterForm sitterForm;
-    private Sitter sitterModel;
-    private Seeker seekerModel;
     private SeekerDao seekerDao;
     private SitterDao sitterDao;
     private MemberDao memberDao;
-    private Member member;
-
 
     static {
         visitorService = new VisitorService();
@@ -67,12 +61,12 @@ public class VisitorService{
         LoginForm loginForm = (LoginForm) actionForm;
         boolean status=true;
         memberDao = MemberDao.getInstance();
-        List memberSet = memberDao.getMember(loginForm.getEmail());
-        Iterator iterator = memberSet.iterator();
-        if(!iterator.hasNext()){
+        Member member = memberDao.getMember(loginForm.getEmail());
+        //Iterator iterator = memberSet.iterator();
+        if(member==null){
             status=false;
         }else{
-            Member member = (Member) iterator.next();
+            //Member member = (Member) iterator.next();
             String memberStatus = member.getStatus().name();
             if(memberStatus.equals("INACTIVE")){
                 status=false;

@@ -40,10 +40,10 @@ public class SitterDao{
     }
 
 
-    public void deleteSitter(Member member){
+    public void deleteSitter(Sitter sitter){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.saveOrUpdate(member);
+        session.update(sitter);
         transaction.commit();
         session.close();
     }

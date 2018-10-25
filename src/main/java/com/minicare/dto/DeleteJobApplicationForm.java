@@ -3,7 +3,7 @@ package com.minicare.dto;
 import org.apache.struts.action.ActionForm;
 
 public class DeleteJobApplicationForm extends ActionForm {
-    private String id;
+    private String id;   //jobId
 
     public String getId() {
         return id;

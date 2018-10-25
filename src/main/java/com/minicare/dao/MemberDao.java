@@ -33,16 +33,16 @@ public class MemberDao {
     }
 
 
-    public List<Member> getMember(String email){
+    public Member getMember(String email){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         String hql ="FROM Member where email = ? and status= ?" ;
         Query query = session.createQuery(hql) ;
         query.setParameter(0,email);
         query.setParameter(1,Status.ACTIVE);
-        List result = query.list();
+        Member member = (Member) query.uniqueResult();
         session.close();
-        return result;
+        return member;
     }
 
 

@@ -24,11 +24,9 @@ public class JobDao {
         return jobDao;
     }
 
-    public void storeJob(Job job , Member member){
+    public void storeJob(Job job ){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        job.setPostedBy(member.getMemberId());
-        job.setStatus(Status.ACTIVE);
         session.save(job);
         transaction.commit();
         session.close();
@@ -76,11 +74,6 @@ public class JobDao {
     public void closeJob(Job job){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-//        String hql = "update Job SET status=? where id=?";
-//        Query query = session.createQuery(hql);
-//        query.setParameter(0,Status.INACTIVE);
-//        query.setInteger(1,jobId);
-//        query.executeUpdate();
         session.update(job);
         transaction.commit();
         session.close();
@@ -89,14 +82,15 @@ public class JobDao {
     public void updateJob(Job job){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        String hql = "update Job SET jobTitle=? , startDateTime=? , endDateTime=? , payPerHour=? where id=?";
-        Query query = session.createQuery(hql);
-        query.setString(0,job.getJobTitle());
-        query.setParameter(1,job.getStartDateTime());
-        query.setParameter(2,job.getEndDateTime());
-        query.setDouble(3,job.getPayPerHour());
-        query.setInteger(4,job.getId());
-        query.executeUpdate();
+//        String hql = "update Job SET jobTitle=? , startDateTime=? , endDateTime=? , payPerHour=? where id=?";
+//        Query query = session.createQuery(hql);
+//        query.setString(0,job.getJobTitle());
+//        query.setParameter(1,job.getStartDateTime());
+//        query.setParameter(2,job.getEndDateTime());
+//        query.setDouble(3,job.getPayPerHour());
+//        query.setInteger(4,job.getId());
+//        query.executeUpdate();
+        session.update(job);
         transaction.commit();
         session.close();
     }

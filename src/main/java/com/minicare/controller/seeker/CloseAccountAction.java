@@ -2,6 +2,7 @@ package com.minicare.controller.seeker;
 
 import com.minicare.exception.MiniCareException;
 import com.minicare.model.Member;
+import com.minicare.model.Seeker;
 import com.minicare.service.JobApplicationService;
 import com.minicare.service.JobService;
 import com.minicare.service.SeekerService;
@@ -18,13 +19,12 @@ public class CloseAccountAction extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest req, HttpServletResponse resp) throws Exception {
         try {
             JobApplicationService jobApplicationService = JobApplicationService.getInstance();
-            JobService jobService = JobService.getInstance();
             SeekerService seekerService = SeekerService.getInstance();
             Member member = (Member) req.getSession().getAttribute("CurrentUser");
-
-            jobService.deleteJobsBySeeker(member.getMemberId());
-            jobApplicationService.deleteJobApplicationsByJobId(member.getMemberId());
-            seekerService.closeSeekerAccount(member);
+            Seeker seeker = (Seeker) member;
+            //jobService.deleteJobsBySeeker(member.getMemberId());
+            //jobApplicationService.deleteJobApplicationsByJobId(member.getMemberId());
+            seekerService.closeSeekerAccount(seeker);
             req.getSession().invalidate();
             ActionMessages actionMessages = new ActionMessages();
             actionMessages.add("Message", new ActionMessage("message.account.close"));

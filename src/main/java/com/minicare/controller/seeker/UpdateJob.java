@@ -29,8 +29,8 @@ public class UpdateJob extends Action {
             if(member.getMemberId()!= job.getPostedBy()){
                 throw new MiniCareException("YOU ARE NOT AUTHORISED TO ACCESS THIS RESOURCE");
             }
-            req.setAttribute("Job", job);
-            jobService.updateJob(jobForm);
+            //req.setAttribute("Job", job);
+            jobService.updateJob(jobForm,member.getMemberId());
             List<Job> jobList = jobService.getJobsById(member);
             req.setAttribute("JobList", jobList);
             return mapping.findForward("listjobs");

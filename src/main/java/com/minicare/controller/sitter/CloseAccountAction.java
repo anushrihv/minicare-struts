@@ -2,6 +2,7 @@ package com.minicare.controller.sitter;
 
 import com.minicare.exception.MiniCareException;
 import com.minicare.model.Member;
+import com.minicare.model.Sitter;
 import com.minicare.service.JobApplicationService;
 import com.minicare.service.SitterService;
 import org.apache.struts.action.*;
@@ -16,12 +17,11 @@ public class CloseAccountAction extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest req , HttpServletResponse resp) throws Exception {
         try {
-            JobApplicationService jobApplicationService = JobApplicationService.getInstance();
             SitterService sitterService = SitterService.getInstance();
             Member member = (Member) req.getSession().getAttribute("CurrentUser");
-
-            jobApplicationService.closeSitterJobApplications(member.getMemberId());
-            sitterService.closeSitterAccount(member);
+            Sitter sitter = (Sitter) member ;
+            //jobApplicationService.closeSitterJobApplications(member.getMemberId());
+            sitterService.closeSitterAccount(sitter);
             req.getSession(false).invalidate();
             ActionMessages actionMessages = new ActionMessages();
             actionMessages.add("Message", new ActionMessage("message.account.close"));

@@ -3,6 +3,7 @@ package com.minicare.controller.seeker;
 import com.minicare.dto.JobForm;
 import com.minicare.model.Job;
 import com.minicare.model.Member;
+import com.minicare.model.Status;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -23,12 +24,18 @@ public class JobUtil {
     }
 
 
-    public Job populateJobModel(JobForm jobForm){
+    public Job populateJobModel(JobForm jobForm,int memberId,boolean isEdit){
         Job job = new Job();
         Timestamp startDateTime = Timestamp.valueOf(jobForm.getStartDateTime());
         Timestamp endDateTime = Timestamp.valueOf(jobForm.getEndDateTime());
         double payPerHour = Double.parseDouble(jobForm.getPayPerHour());
 
+        if(isEdit) {
+            int jobId = Integer.parseInt(jobForm.getId());
+            job.setId(jobId);
+        }
+        job.setStatus(Status.ACTIVE);
+        job.setPostedBy(memberId);
         job.setJobTitle(jobForm.getJobTitle());
         job.setStartDateTime(startDateTime);
         job.setEndDateTime(endDateTime);

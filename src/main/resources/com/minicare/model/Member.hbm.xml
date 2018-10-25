@@ -37,6 +37,10 @@
                     <param name="useNamed">true</param>
                 </type>
             </property>
+            <set name="jobapplication" lazy="false" fetch="join" inverse="true" table="jobapplication" cascade="save-update" >
+                <key column="MemberId" />
+                <one-to-many class="com.minicare.model.JobApplication" />
+            </set>
         </joined-subclass>
 
         <joined-subclass name="com.minicare.model.Seeker" table="seeker">
@@ -49,6 +53,10 @@
                     <param name="useNamed">true</param>
                 </type>
             </property>
+            <set name="job" lazy="false" fetch="join" inverse="true" table="job" cascade="save-update" >
+                <key column="PostedBy" />
+                <one-to-many class="com.minicare.model.Job" />
+            </set>
         </joined-subclass>
     </class>
 

@@ -10,6 +10,7 @@ C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\control
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\visitor\VisitorUtil.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dao\SitterDao.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\JobUtil.java
+C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\CloseJobAction.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\sitter\EditAccountFormAction.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\SeekerEditAccountForm.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\model\Seeker.java
@@ -28,7 +29,6 @@ C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\model\M
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\EditAccountFormAction.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\service\SitterService.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\exception\MiniCareException.java
-C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\CloseJob.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\MemberForm.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\dto\ValidationForm.java
 C:\Users\Anushri\IdeaProjects\minicare-struts\src\main\java\com\minicare\controller\seeker\RegisterAction.java

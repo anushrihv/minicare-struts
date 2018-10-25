@@ -16,7 +16,6 @@ public class EditAccountAction extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         SeekerForm seekerForm = (SeekerForm) form ;
         HttpSession session = request.getSession(false);
-        Member member = (Member) session.getAttribute("CurrentUser");
         SeekerService seekerService = SeekerService.getInstance();
         Seeker seekerModel = seekerService.editSeekerAccount(seekerForm);
         session.setAttribute("CurrentUser",seekerModel);

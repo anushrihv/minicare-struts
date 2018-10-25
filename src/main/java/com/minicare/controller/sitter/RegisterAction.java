@@ -24,9 +24,6 @@ public class RegisterAction extends Action {
             MemberService memberService = MemberService.getInstance();
             SitterForm sitterForm = (SitterForm)form;
             sitterForm.setType(Type.SITTER.name());
-
-            sitterForm.setPassword(PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword()));
-            sitterForm.setPassword(PasswordHashHelper.get_SHA_256_SecurePassword(sitterForm.getPassword2()));
             ActionErrors actionErrors = new ActionErrors();
 
             if (!memberService.uniqueEmail(sitterForm.getEmail())) {

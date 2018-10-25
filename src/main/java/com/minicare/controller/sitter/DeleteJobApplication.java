@@ -3,6 +3,7 @@ package com.minicare.controller.sitter;
 import com.minicare.dto.DeleteJobApplicationForm;
 import com.minicare.exception.MiniCareException;
 import com.minicare.dto.JobApplicationForm;
+import com.minicare.model.Job;
 import com.minicare.model.JobApplication;
 import com.minicare.model.Member;
 import com.minicare.service.JobApplicationService;
@@ -26,7 +27,8 @@ public class DeleteJobApplication extends Action {
             int jobId = Integer.parseInt(deleteJobApplicationForm.getId());
             Member member = (Member) req.getSession().getAttribute("CurrentUser");
             JobApplicationService jobApplicationService = JobApplicationService.getInstance();
-            jobApplicationService.deleteJobApplication(jobId, member.getMemberId());
+            JobApplication jobApplication = jobApplicationService.getJobApplication(jobId,member.getMemberId());
+            jobApplicationService.deleteJobApplication(jobApplication);
             List<JobApplication> jobApplicationList = jobApplicationService.getJobApplicationList(req);
             req.setAttribute("MyJobApplicationList", jobApplicationList);
             return mapping.findForward("listmyjobapplications");

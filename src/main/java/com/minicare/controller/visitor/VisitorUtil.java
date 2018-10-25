@@ -28,10 +28,9 @@ public class VisitorUtil {
     public void populateModelFromDb(String email, HttpSession session) throws SQLException,ClassNotFoundException{
         MemberDao memberDao = MemberDao.getInstance();
 
-        List memberSet = memberDao.getMember(email);
-        Iterator iterator = memberSet.iterator();
-        Member member = (Member) iterator.next();
-
+        Member member = memberDao.getMember(email);
+        //Iterator iterator = memberSet.iterator();
+        //Member member = (Member) iterator.next();
         session.setAttribute("CurrentUser", member);
     }
 }

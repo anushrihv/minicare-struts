@@ -52,10 +52,10 @@ public class SeekerDao {
         session.close();
     }
 
-    public void deleteSeeker(Member member){
+    public void deleteSeeker(Seeker seeker){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.saveOrUpdate(member);
+        session.update(seeker);
         transaction.commit();
         session.close();
     }

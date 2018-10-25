@@ -5,16 +5,14 @@ import com.minicare.dao.JobDao;
 import com.minicare.dao.MemberDao;
 import com.minicare.dao.SeekerDao;
 import com.minicare.dto.SeekerForm;
-import com.minicare.model.Job;
-import com.minicare.model.Member;
-import com.minicare.model.Seeker;
-import com.minicare.model.Status;
+import com.minicare.model.*;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 public class SeekerService {
     static SeekerService seekerService;
@@ -32,7 +30,7 @@ public class SeekerService {
         return seekerService;
     }
 
-    public List<Job> getJobsById(HttpServletRequest request) throws SQLException,ClassNotFoundException{
+    public List<Job> getJobsById(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         jobDao = JobDao.getInstance();
         Member member = (Member)session.getAttribute("CurrentUser");
@@ -40,13 +38,19 @@ public class SeekerService {
         return jobList;
     }
 
-    public void closeSeekerAccount(Member member) {
-        MemberDao memberDao = MemberDao.getInstance();
+    public void closeSeekerAccount(Seeker seeker) {
         SeekerDao seekerDao = SeekerDao.getInstance();
 
-        member.setStatus(Status.INACTIVE);
-        //memberDao.deleteMember(member);
-        seekerDao.deleteSeeker(member);
+        seeker.setStatus(Status.INACTIVE);
+        Set<Job> jobSet = seeker.getJob();
+        for(Job job : jobSet){
+            job.setStatus(Status.INACTIVE);
+            Set<JobApplication> jobApplicationSet = job.getJobapplication();
+            for(JobApplication jobApplication : jobApplicationSet){
+                jobApplication.setStatus(Status.INACTIVE);
+            }
+        }
+        seekerDao.deleteSeeker(seeker);
     }
 
     public Seeker getSeeker(int seekerId){

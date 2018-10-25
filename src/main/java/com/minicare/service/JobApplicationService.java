@@ -4,10 +4,7 @@ import com.minicare.dao.JobApplicationDao;
 import com.minicare.dao.JobDao;
 import com.minicare.dao.SitterDao;
 import com.minicare.dto.JobApplicationForm;
-import com.minicare.model.Job;
-import com.minicare.model.JobApplication;
-import com.minicare.model.Member;
-import com.minicare.model.Sitter;
+import com.minicare.model.*;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
@@ -57,9 +54,10 @@ public class JobApplicationService {
         return jobApplicationList;
     }
 
-    public void deleteJobApplication(int jobId, int memberId){
+    public void deleteJobApplication(JobApplication jobApplication){
+        jobApplication.setStatus(Status.INACTIVE);
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
-        jobApplicationDao.deleteJobApplication(jobId,memberId);
+        jobApplicationDao.deleteJobApplication(jobApplication);
     }
 
     public List<JobApplicationForm> getJobApplicationsByJobId(int jobId) {
@@ -68,9 +66,9 @@ public class JobApplicationService {
         return jobApplicationFormList;
     }
 
-    public void closeSitterJobApplications(int sitterId) {
+    public JobApplication getJobApplication(int jobId,int memberId){
         JobApplicationDao jobApplicationDao = JobApplicationDao.getInstance();
-        jobApplicationDao.closeJobApplicationsByMemberId(sitterId);
+        return jobApplicationDao.getJobApplication(jobId,memberId);
     }
 
     public void deleteJobApplicationsByJobId(int memberId){

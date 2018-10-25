@@ -185,7 +185,7 @@
         </action>
 
         <!-- close job -->
-        <action path="/seeker/closejob" type="com.minicare.controller.seeker.CloseJob"
+        <action path="/seeker/closejob" type="com.minicare.controller.seeker.CloseJobAction"
                 name="JobForm" validate="false" scope="request">
             <forward name="listjobs" path="/jsp/listJobs.jsp" redirect="false" />
         </action>

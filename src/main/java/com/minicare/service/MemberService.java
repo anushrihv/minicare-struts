@@ -31,13 +31,17 @@ public class MemberService {
 
     public  boolean uniqueEmail(String email)  {
         MemberDao memberDao = MemberDao.getInstance();
-        List memberList = memberDao.getMember(email);
-        Iterator iterator = memberList.iterator();
-        if(iterator.hasNext()){
-            return false;
-        }
-        else
+        Member member = memberDao.getMember(email);
+//        Iterator iterator = memberList.iterator();
+//        if(iterator.hasNext()){
+//            return false;
+//        }
+//        else
+//            return true;
+        if(member==null){
             return true;
+        }
+        else return false;
     }
 
     public ActionErrors checkPassword(HttpServletRequest request) {

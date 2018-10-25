@@ -27,7 +27,6 @@ public class ApplyJobAction extends Action {
             JobApplicationService jobApplicationService = JobApplicationService.getInstance();
             jobApplicationService.storeJobApplication(req, id, expectedPay);
             return mapping.findForward("listjobapplications");
-            //resp.sendRedirect("/minicare-1.0-SNAPSHOT/sitter/listjobapplications.do");
     }catch (Exception e){
             Logger logger = Logger.getLogger("ApplyJobFormAction");
             logger.log(Level.SEVERE,"exception occurred",e);

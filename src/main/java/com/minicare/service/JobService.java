@@ -35,9 +35,9 @@ public class JobService {
     public void storeJob(HttpServletRequest request,JobForm jobForm){
         JobUtil jobUtil = JobUtil.getInstance();
         Member member = (Member) request.getSession(false).getAttribute("CurrentUser");
-        Job job = jobUtil.populateJobModel(jobForm);
+        Job job = jobUtil.populateJobModel(jobForm,member.getMemberId(),false);
         JobDao jobDao = JobDao.getInstance();
-        jobDao.storeJob(job, member);
+        jobDao.storeJob(job);
     }
 
     public List<Job> closeJob(int jobId, Member member)  {
@@ -60,15 +60,10 @@ public class JobService {
         return job;
     }
 
-    public void updateJob(JobForm jobForm) {
-        Job job = new Job();
+    public void updateJob(JobForm jobForm,int memberId) {
         JobDao jobDao = JobDao.getInstance();
-
-        job.setId(Integer.parseInt(jobForm.getId()));
-        job.setJobTitle(jobForm.getJobTitle());
-        job.setStartDateTime(Timestamp.valueOf(jobForm.getStartDateTime()));
-        job.setEndDateTime(Timestamp.valueOf(jobForm.getEndDateTime()));
-        job.setPayPerHour(Double.parseDouble(jobForm.getPayPerHour()));
+        JobUtil jobUtil = JobUtil.getInstance();
+        Job job = jobUtil.populateJobModel(jobForm,memberId,true);
         jobDao.updateJob(job);
     }
 
@@ -86,6 +81,7 @@ public class JobService {
         }
         return jobList;
     }
+
 
     public void deleteJobsBySeeker(int seekerId){
         JobDao jobDao = JobDao.getInstance();

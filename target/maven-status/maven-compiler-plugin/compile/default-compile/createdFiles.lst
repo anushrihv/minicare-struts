@@ -13,6 +13,7 @@ com\minicare\junk.class
 com\minicare\dto\PasswordHashHelper.class
 com\minicare\service\JobService.class
 com\minicare\controller\sitter\ListJobApplication.class
+com\minicare\controller\seeker\CloseJobAction.class
 com\minicare\filter\AuthorizationFilter.class
 com\minicare\controller\member\Logout.class
 com\minicare\controller\member\SearchMember.class
@@ -29,7 +30,6 @@ com\minicare\controller\sitter\SitterHomePage.class
 com\minicare\controller\seeker\ListApplications.class
 com\minicare\controller\seeker\RegisterAction.class
 com\minicare\service\MemberService.class
-com\minicare\controller\seeker\CloseJob.class
 com\minicare\controller\seeker\JobUtil.class
 com\minicare\controller\seeker\EditAccountFormAction.class
 com\minicare\dto\JobApplicationForm.class
